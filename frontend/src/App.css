@@ -5,6 +5,16 @@
   text-align: center;
 }
 
+.bars-container {
+  display: flex; align-items: flex-end; justify-content: center; height: 400px; width: 100%; overflow: hidden; margin: 20px auto; border: 1px solid #ddd;
+}
+
+.bar {
+  flex: 1; 
+  margin: 0 1px;
+  background-color: steelblue;
+  transition: height 0.2s ease;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

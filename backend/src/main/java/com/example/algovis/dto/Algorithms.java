@@ -37,7 +37,7 @@ public class Algorithms {
 
     private static int[] randomArray(int size, Long seed) {
         if (size < 2) size = 2;
-        if (size > 200) size = 200;
+        if (size > 50) size = 50;
         Random r = (seed == null) ? new Random() : new Random(seed);
         int[] a = new int[size];
         for (int i = 0; i < size; i++) 

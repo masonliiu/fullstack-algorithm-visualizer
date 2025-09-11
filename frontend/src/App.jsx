@@ -6,11 +6,11 @@ const styles = {
 
   bodyWrap: { background: "#0f1220", fontSize: 28, minHeight: "100vh" },
   h1: { margin: "0, 0 12px", fontSize: 28 },
-  controls: {display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 12, alignItems: "center", background: "#181a2b", padding: 12, borderRadius: 14},
-  label: { display: "flex", gap: 8, alignItems: "center"},
-  range: { width: 140},
-  buttons: {display: "flex", gap: 8},
-  btn: { background: "#3b82f6", color: "white", border: "none", padding: "8px 12px", borderRadius: 10, cursor: "pointer"},
+  controls: {display: "grid", gridTemplateColumns: "auto 1fr", gridTemplateRows: "auto auto", gap: 12, alignItems: "center", background: "#181a2b", padding: 12, borderRadius: 14},
+  label: { display: "flex", gap: 8, alignItems: "center", whiteSpace: "nowrap"},
+  range: { width: 120, flexShrink: 0},
+  buttons: {display: "flex", gap: 8, flexWrap: "nowrap", justifyContent: "flex-start"},
+  btn: { background: "#3b82f6", color: "white", border: "none", padding: "12px 12px", borderRadius: 10, cursor: "pointer", flexShrink: 0},
   barsWrap: { display: "flex", alignItems: "flex-end", height: 360, gap: 2, background: "#181a2b", borderRadius: 14, padding: 10, marginTop: 16, overflow: "hidden"},
   bar: { background: "#8b95b3", borderRadius: "6px 6px 0 0"},
   note: { opacity: 0.7, fontSize: 12, marginTop: 8}
@@ -25,8 +25,8 @@ const HL_COLORS = {
 
 export default function App() {
   const [algorithm, setAlgorithm] = useState("bubble");
-  const [size, setSize] = useState(30);
-  const [speed, setSpeed] = useState(40);
+  const [size, setSize] = useState(25);
+  const [speed, setSpeed] = useState(200);
   const [playing, setPlaying] = useState(false);
 
   const [frames, setFrames] = useState([]);
@@ -37,7 +37,6 @@ export default function App() {
     for (let k = i; k >= 0; k--) {
       const f = frames[k];
       if (f && Array.isArray(f.array)) {
-        console.log("Display array at frame", k, ":", f.array);
         return f.array;
       }
     }
@@ -58,7 +57,6 @@ export default function App() {
     setIndex(0);
   
     const data = await fetchSort({ algorithm, size });
-    console.log("Fetched from backend:", data);   // <— debug line
   
     const steps = Array.isArray(data.steps) ? data.steps : [];
     setFrames(steps);
@@ -86,7 +84,7 @@ export default function App() {
     }, speed);
   }
 
-  function pause() {
+  function stop() {
     if (timer.current) { clearInterval(timer.current); timer.current = null; }
     setPlaying(false);
   }
@@ -98,7 +96,7 @@ export default function App() {
 
   useEffect(() => {
     if (!playing) return;
-    pause();
+    stop();
     play();
   }, [speed]);
 
@@ -110,6 +108,39 @@ export default function App() {
       {/* Controls */}
       <div style={styles.controls}>
         <label style={styles.label}>
+          Size: <span style={{display: "inline-block", minWidth: 35, textAlign: "right"}}>{size}</span>
+          <input
+            type="range"
+            min="5"
+            max="50"
+            value={size}
+            style={styles.range}
+            onChange={e => setSize(Number(e.target.value))}
+          />
+        </label>
+
+        <label style = {styles.label}>
+          Speed (ms): <span style ={{display: "inline-block", minWidth: 52, textAlign: "right"}}>{speed}</span>
+          <input    
+            type="range"
+            min="5"
+            max="300"
+            value={speed}
+            style={styles.range}
+            onChange={e => setSpeed(Number(e.target.value))}
+          />
+        
+        <div style={styles.buttons}>
+          {!playing ? (
+            <button style={styles.btn} onClick={play}>Run</button>
+          ) : (
+            <button style={styles.btn} onClick={stop}>Stop</button>
+          )}
+          <button style={styles.btn} onClick={loadRun}>Shuffle</button>
+        </div>
+        </label>
+      <div style={{gridColumn: "1 / -1"}}>
+        <label style={styles.label}>
           Algorithm:
           <select value={algorithm} onChange={e => setAlgorithm(e.target.value)}>
             <option value="bubble">Bubble</option>
@@ -120,37 +151,25 @@ export default function App() {
             <option value="heap">Heap</option>
           </select>
         </label>
-
-        <label style={styles.label}>
-          Size: {size}
-          <input type="range" min="5" max="150" value={size} style={styles.range}
-                 onChange={e => setSize(Number(e.target.value))} />
-        </label>
-
-        <label style={styles.label}>
-          Speed (ms): {speed}
-          <input type="range" min="5" max="300" value={speed} style={styles.range}
-                 onChange={e => setSpeed(Number(e.target.value))} />
-        </label>
-
-        <div style={styles.buttons}>
-          {!playing ? (
-            <button style={styles.btn} onClick={play}>Run</button>
-          ) : (
-            <button style={styles.btn} onClick={pause}>Pause</button>
-          )}
-          <button style={styles.btn} onClick={loadRun}>Shuffle</button>
-        </div>
-      </div>
+      </div>   
+    </div>
 
       {/* Bars */}
       <div style={styles.barsWrap}>
-        {console.log("Rendering bars with displayArray:", displayArray)}
         {displayArray.map((v, i) => {
           const isHL = highlightIndices?.includes?.(i);
           const bg = isHL ? HL_COLORS[highlightType] || styles.bar.background : styles.bar.background;
           return (
-            <div key={i} style={{ ...styles.bar, height: v * 3, width: barWidth, background: bg }} title={String(v)} />
+            <div
+              key = {i}
+              style = {{
+                width: barWidth,
+                height: `${(v / Math.max(...displayArray)) * 100}%`,
+                background: bg,
+                borderRadius: "4px 4px 0 0",
+                transition: "height 0.2s ease"
+              }}
+            />
           );
         })}
       </div>
