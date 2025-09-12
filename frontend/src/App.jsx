@@ -17,21 +17,29 @@ const styles = {
 };
 
 const HL_COLORS = {
-  compare: "#facc15",
-  swap: "#fb923c",
-  overwrite: "#a78bfa",
-  mark_final: "#34d399"
+  compare: "#3b82f6",
+  swap: "#ef4444",
+  overwrite: "#f59342",
+  mark_final: "#22c55e"
 };
+const LEGEND = [
+  { type: "compare", color: HL_COLORS.compare, desc: "Comparing values" },
+  { type: "swap", color: HL_COLORS.swap, desc: "Swapping values" },
+  { type: "overwrite", color: HL_COLORS.overwrite, desc: "Overwriting value" },
+  { type: "mark_final", color: HL_COLORS.mark_final, desc: "Final position" }
+];
+
 
 export default function App() {
   const [algorithm, setAlgorithm] = useState("bubble");
-  const [size, setSize] = useState(25);
-  const [speed, setSpeed] = useState(200);
+  const [size, setSize] = useState(15);
+  const [speed, setSpeed] = useState(300);
   const [playing, setPlaying] = useState(false);
 
   const [frames, setFrames] = useState([]);
   const [index, setIndex] = useState(0);
   const timer = useRef(null);
+  const [finalized, setFinalized] = useState([]);
 
   function getDisplayArray(frames, i) {
     for (let k = i; k >= 0; k--) {
@@ -55,13 +63,14 @@ export default function App() {
     if (timer.current) { clearInterval(timer.current); timer.current = null; }
     setFrames([]); 
     setIndex(0);
+    setFinalized([]);
   
     const data = await fetchSort({ algorithm, size });
   
     const steps = Array.isArray(data.steps) ? data.steps : [];
     setFrames(steps);
   
-    // Immediately display the first snapshot if available
+    //display snapshot
     if (steps.length > 0) {
       setIndex(0);
     }
@@ -71,15 +80,26 @@ export default function App() {
   function play() {
     if (timer.current) return;
     setPlaying(true);
+    if (index >= frames.length-1) {
+      setIndex(0);
+      setFinalized([]);
+    }
     timer.current = setInterval(() => {
       setIndex(i => {
-        if (i + 1 >= frames.length) {
+        const nextIndex = i + 1;
+        if (nextIndex >= frames.length) {
           clearInterval(timer.current);
           timer.current = null;
           setPlaying(false);
+          const lastFrame = frames[frames.length - 1];
+
+          setFinalized([...Array(displayArray.length).keys()]);
           return i;
         }
-        return i + 1;
+        if (frames[nextIndex]?.type === "MARK_FINAL") {
+          setFinalized(prev => [...new Set([...prev, ...frames[nextIndex].indices])]);
+        }
+        return nextIndex;
       });
     }, speed);
   }
@@ -95,7 +115,7 @@ export default function App() {
   }, [algorithm, size]);
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing) return;``
     stop();
     play();
   }, [speed]);
@@ -158,23 +178,41 @@ export default function App() {
       <div style={styles.barsWrap}>
         {displayArray.map((v, i) => {
           const isHL = highlightIndices?.includes?.(i);
-          const bg = isHL ? HL_COLORS[highlightType] || styles.bar.background : styles.bar.background;
+          let bg = isHL ? HL_COLORS[highlightType] || styles.bar.background : styles.bar.background;
+          if (finalized.includes(i)) {
+            bg = HL_COLORS.mark_final;
+          }
           return (
             <div
-              key = {i}
-              style = {{
+              key={i}
+              style={{
                 width: barWidth,
                 height: `${(v / Math.max(...displayArray)) * 100}%`,
                 background: bg,
                 borderRadius: "4px 4px 0 0",
-                transition: "height 0.2s ease"
+                transition: "height 0.2s ease",
               }}
             />
           );
         })}
       </div>
 
-      <p style={styles.note}>compare: yellow | swap: orange | overwrite: purple | final: green</p>
+      <div style={{...styles.note, display: "flex", gap: 14, alignItems: "center", gap: 4}}>
+        {LEGEND.map(l => (
+          <span key={l.type} style ={{display: "flex", alignItems: "center", gap: 4}}>
+            <span style={{
+              display: "inline-block",
+              width: 16,
+              height: 12,
+              background: l.color,
+              borderRadius: 3,
+              marginRIght: 3,
+              border: "1px solid #2226"
+            }} />
+            <span>{l.desc}</span>
+          </span>
+        ))}
+      </div>
       </div>
     </div>
   );

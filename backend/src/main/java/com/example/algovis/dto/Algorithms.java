@@ -87,7 +87,9 @@ public class Algorithms {
             arr[x + 1] = key;
             steps.add(Step.overwrite(x + 1, key, arr));
             steps.add(Step.snapshot(arr));
-            steps.add(Step.markFinal(x + 1, arr));
+            for (int k = 0; k < arr.length; k++) {
+                steps.add(Step.markFinal(k, arr));
+            }
         }
         return steps;
     }
