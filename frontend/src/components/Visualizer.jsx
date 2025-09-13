@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchSort } from "../api";
+import { useParams } from "react-router-dom";
 
 const styles = {
   app: {maxWidth: 1000, margin: "24px auto", padding: 16, color: "#e6e9ef", fontFamily: "system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif"},
@@ -30,8 +31,8 @@ const LEGEND = [
 ];
 
 
-export default function Visualizer() {
-  const [algorithm, setAlgorithm] = useState("bubble");
+export default function Visualizer({ algo }) {
+  const [algorithm, setAlgorithm] = useState(algo || "bubble");
   const [size, setSize] = useState(15);
   const [speed, setSpeed] = useState(300);
   const [playing, setPlaying] = useState(false);
@@ -119,6 +120,10 @@ export default function Visualizer() {
     stop();
     play();
   }, [speed]);
+
+  useEffect(() => {
+    setAlgorithm(algo || "bubble"); 
+  }, [algo]);
 
   return (
     <div style={styles.bodyWrap}>
