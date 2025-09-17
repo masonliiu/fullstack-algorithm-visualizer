@@ -6,7 +6,7 @@ export default function InsertionSort() {
             <h1>Insertion Sort</h1>
             <p>Simple algorithm that loops through an array repeatedly, comparing and swapping adjacent elements depending on value.</p>
 
-            <Visualizer algo="insertion" />
+            <Visualizer algo ="insertion" />
         </div>
     );
 }

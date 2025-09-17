@@ -20,13 +20,11 @@ const styles = {
 const HL_COLORS = {
   compare: "#facc15",
   swap: "#ef4444",
-  overwrite: "#f59342",
   mark_final: "#22c55e"
 };
 const LEGEND = [
   { type: "compare", color: HL_COLORS.compare, desc: "Comparing values" },
   { type: "swap", color: HL_COLORS.swap, desc: "Swapping values" },
-  { type: "overwrite", color: HL_COLORS.overwrite, desc: "Overwriting value" },
   { type: "mark_final", color: HL_COLORS.mark_final, desc: "Final position" }
 ];
 
@@ -88,16 +86,21 @@ export default function Visualizer({ algo }) {
     timer.current = setInterval(() => {
       setIndex(i => {
         const nextIndex = i + 1;
+        console.log("FRAME", nextIndex, frames[nextIndex]);
+        console.log("FINALIZED BEFORE", finalized);
         if (nextIndex >= frames.length) {
           clearInterval(timer.current);
           timer.current = null;
           setPlaying(false);
           const lastFrame = frames[frames.length - 1];
 
-          setFinalized([...Array(displayArray.length).keys()]);
+          if (lastFrame?.type === "MARK_FINAL") {
+            setFinalized(prev => [...new Set([...prev, ...lastFrame.indices])]);
+          }
           return i;
         }
         if (frames[nextIndex]?.type === "MARK_FINAL") {
+          console.log("Marking final:", frames[nextIndex].indices);
           setFinalized(prev => [...new Set([...prev, ...frames[nextIndex].indices])]);
         }
         return nextIndex;

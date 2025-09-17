@@ -19,8 +19,14 @@ export default function Navbar() {
                 <Link to="/" style={{ marginRight: "1rem", color: "white", textDecoration: "none"}}>
                 Home 
                 </Link>
-                <Link to="/sorting/bubble" style={{ color: "white", textDecoration: "none"}}>
+                <Link to="/sorting/bubble" style={{ marginRight: "1rem", color: "white", textDecoration: "none"}}>
                 Bubble Sort 
+                </Link>
+                <Link to="/sorting/insertion" style={{ marginRight: "1rem", color: "white", textDecoration: "none"}}>
+                Insertion Sort 
+                </Link>
+                <Link to="/sorting/selection" style={{ marginRight: "1rem", color: "white", textDecoration: "none"}}>
+                Selection Sort 
                 </Link>
             </div>
         </nav>

@@ -5,8 +5,6 @@ public enum StepType {
 
     SWAP,
 
-    OVERWRITE,
-
     MARK_FINAL,
 
     ARRAY_SNAPSHOT

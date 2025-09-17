@@ -20,9 +20,6 @@ public class Step {
     public static Step swap(int index1, int index2, int[] arr) {
         return new Step(StepType.SWAP, new int[]{index1, index2}, arr.clone());
     }
-    public static Step overwrite(int index, int newValue, int[] arr) {
-        return new Step(StepType.OVERWRITE, new int[]{index, newValue}, arr.clone());
-    }
     public static Step markFinal(int index, int[] arr) {
         return new Step(StepType.MARK_FINAL, new int[]{index}, arr.clone());
     }

@@ -72,28 +72,36 @@ public class Algorithms {
     // Insertion sort
     private static List<Step> insertion(int[] arr) {
         List<Step> steps = new ArrayList<>();
-        for (int i = 1; i < arr.length; i++) {
-            int key = arr[i];
-            int x = i-1;
-            while (x >= 0) {
-                steps.add(Step.compare(x, x+1, arr));
-                if (arr[x] > key) {
-                    arr[x+1] = arr[x];
-                    steps.add(Step.overwrite(x + 1, arr[x + 1], arr));
-                    steps.add(Step.snapshot(arr));
-                    x--;
-                } else break;
+        int n = arr.length;
+
+            // In insertion sort, only the element just inserted is finalized after each pass.
+            for (int i = 1; i < n; i++) {
+                int j = i;
+                // Move arr[i] to its correct position in the sorted portion [0..i]
+                while (j > 0) {
+                    steps.add(Step.compare(j - 1, j, arr));
+                    if (arr[j - 1] > arr[j]) {
+                        // Swap adjacent elements to shift larger elements to the right
+                        int temp = arr[j];
+                        arr[j] = arr[j - 1];
+                        arr[j - 1] = temp;
+                        steps.add(Step.swap(j - 1, j, arr));
+                        steps.add(Step.snapshot(arr));
+                        j--;
+                    } else {
+                        break;
+                    }
             }
-            arr[x + 1] = key;
-            steps.add(Step.overwrite(x + 1, key, arr));
-            steps.add(Step.snapshot(arr));
-            for (int k = 0; k < arr.length; k++) {
-                steps.add(Step.markFinal(k, arr));
-            }
+                        // Only mark the position where the key was inserted as finalized (sorted so far)
         }
+                // After the entire sort, mark all elements as finalized (for visualization)
+        // This ensures all bars turn green at the end.
+        for (int i = 0; i < n; i++) {
+            steps.add(Step.markFinal(i, arr));
+        }
+
         return steps;
     }
-
     // Selection sort
     private static List<Step> selection(int[] arr) {
         List<Step> steps = new ArrayList<>();
