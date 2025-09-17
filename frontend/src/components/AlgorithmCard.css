@@ -1,0 +1,75 @@
+.algorithm-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 20px;
+    border-radius: 16px;
+    color: white;
+    max-width: 280px;
+    min-height: 180px;
+    box-shadow: 0 0 10px rgba(77, 166, 255, 0.5);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .algorithm-card.hovered {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 30px rgba(77, 166, 255, 0.8);
+  }
+  
+  .algorithm-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .description {
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.85;
+    flex-grow: 1;
+  }
+  
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+  
+  .difficulty {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    color: "white";
+    transition: "transform 0.2s ease, box-shadow 0.2s ease";
+    cursor: default;
+  }
+  .difficulty.easy {
+    background: rgba(34, 197, 04, 0.7);
+    box-shadow: 0 0 12px rgba(34, 197, 04, 1);
+  }
+  .difficulty.medium {
+    background: rgba(234, 179, 8, 0.8); 
+    box-shadow: 0 0 12px rgba(234, 179, 8, 1);
+  }
+  .difficulty.hard {
+    background: rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 1);
+  }
+  .visualize {
+    font-size: 14px;
+    margin: 0;
+    font-weight: bold;
+    color: #4da6ff; 
+  }
+  

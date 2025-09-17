@@ -73,15 +73,11 @@ public class Algorithms {
     private static List<Step> insertion(int[] arr) {
         List<Step> steps = new ArrayList<>();
         int n = arr.length;
-
-            // In insertion sort, only the element just inserted is finalized after each pass.
             for (int i = 1; i < n; i++) {
                 int j = i;
-                // Move arr[i] to its correct position in the sorted portion [0..i]
                 while (j > 0) {
                     steps.add(Step.compare(j - 1, j, arr));
                     if (arr[j - 1] > arr[j]) {
-                        // Swap adjacent elements to shift larger elements to the right
                         int temp = arr[j];
                         arr[j] = arr[j - 1];
                         arr[j - 1] = temp;
@@ -92,10 +88,7 @@ public class Algorithms {
                         break;
                     }
             }
-                        // Only mark the position where the key was inserted as finalized (sorted so far)
         }
-                // After the entire sort, mark all elements as finalized (for visualization)
-        // This ensures all bars turn green at the end.
         for (int i = 0; i < n; i++) {
             steps.add(Step.markFinal(i, arr));
         }
