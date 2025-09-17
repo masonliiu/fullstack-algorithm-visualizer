@@ -168,17 +168,7 @@ export default function Visualizer({ algo }) {
         </div>
         </label>
       <div style={{gridColumn: "1 / -1"}}>
-        <label style={styles.label}>
-          Algorithm:
-          <select value={algorithm} onChange={e => setAlgorithm(e.target.value)}>
-            <option value="bubble">Bubble</option>
-            <option value="insertion">Insertion</option>
-            <option value="selection">Selection</option>
-            <option value="merge">Merge</option>
-            <option value="quick">Quick</option>
-            <option value="heap">Heap</option>
-          </select>
-        </label>
+        
       </div>   
     </div>
 
