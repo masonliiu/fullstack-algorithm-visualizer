@@ -4,8 +4,7 @@ export default function BubbleSort() {
     return (
         <div style={{ padding: "32px", minHeight: "100vh", paddingTop: "130px", color: "white"}}>
             <h1>Bubble Sort</h1>
-            <p>Simple algorithm that loops through an array repeatedly, comparing and swapping adjacent elements depending on value.</p>
-
+            <p>Repeatedly compares adjacent elements based on value, swapping them until the largest items “bubble up” to the end of the list.</p>
             <Visualizer algo ="bubble" />
         </div>
     );
