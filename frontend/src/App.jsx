@@ -4,10 +4,12 @@ import Home from "./pages/Home";
 import BubbleSort from "./pages/Sorting/BubbleSort";
 import InsertionSort from "./pages/Sorting/InsertionSort";
 import SelectionSort from "./pages/Sorting/SelectionSort";
+import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
     return (
         <Layout>
+            <ScrollToTop/>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/sorting/bubble" element={<BubbleSort />} />

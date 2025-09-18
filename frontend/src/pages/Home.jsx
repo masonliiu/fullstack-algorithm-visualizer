@@ -24,7 +24,7 @@ export default function Home() {
                     sortingSection.classList.add("hidden");
                 }
             },
-            {threshold: 0.7}
+            { threshold: 0.6 }
         );
         observer.observe(sortingSection);
 
