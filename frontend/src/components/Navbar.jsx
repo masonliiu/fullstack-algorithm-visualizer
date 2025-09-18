@@ -1,18 +1,36 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function Navbar() {
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <nav className="navbar">
-            <div className="navbar-left">
-                <Link to="/" className="navbar-link">Home</Link>
+        <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+            <div className="navbar-logo">
+                <Link to="/" className="navbar-link">Algorithm Visualizer</Link>
             </div>
-            <h2 className="navbar-logo">
-                <Link to="/" className="navbar-link">
-                    Algorithm Visualizer
-                </Link>
-            </h2>
+
+            <div className="navbar-center">
+                <Link to="/" className="navbar-link">Home</Link>
+                <Link to="/sorting/bubble" className="navbar-link">Bubble Sort</Link>
+                <Link to="/sorting/insertion" className="navbar-link">Insertion Sort</Link>
+                <Link to="/sorting/selection" className="navbar-link">Selection Sort</Link>
+            </div>
+
             <div className="navbar-socials">
                 <a 
                     href="https://github.com/masonliiu"
