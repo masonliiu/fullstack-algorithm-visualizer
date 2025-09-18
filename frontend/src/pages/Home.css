@@ -50,7 +50,32 @@ body {
 }
 
 .hero-button {
-    background: linear-gradient(135deg, #4da6ff, #2563eb);
+    background: linear-gradient(135deg, #5ca6ef, #1d3e87);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 15px 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    box-shadow: 0 0 12px rgba(77, 166, 255, 0.6);
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.hero-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    background: linear-gradient(135deg, #5bb8ff, #3b7ff0);
+    box-shadow: 0 0 15px rgba(77, 166, 255, 0.9),
+                0 0 25px rgba(77, 166, 255, 0.7),
+                0 0 40px rgba(37, 99, 235, 0.6);
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.9),
+                 0 0 2px rgba(77, 166, 255, 0.7);
+}
+
+.hero-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 0 10px rgba(77, 166, 255, 0.7);
 }
 
 .card-grid {
