@@ -1,22 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchSort } from "../api";
 import { useParams } from "react-router-dom";
-
-const styles = {
-  app: {maxWidth: 1000, margin: "24px auto", padding: 16, color: "#e6e9ef", fontFamily: "system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif"},
-
-  bodyWrap: { background: "#0f1220", fontSize: 28, minHeight: "100vh" },
-  h1: { margin: "0, 0 12px", fontSize: 28 },
-  controls: {display: "grid", gridTemplateColumns: "auto 1fr", gridTemplateRows: "auto auto", gap: 12, alignItems: "center", background: "#181a2b", padding: 12, borderRadius: 14},
-  label: { display: "flex", gap: 8, alignItems: "center", whiteSpace: "nowrap"},
-  range: { width: 120, flexShrink: 0},
-  buttons: {display: "flex", gap: 8, flexWrap: "nowrap", justifyContent: "flex-start"},
-  btn: { background: "#3b82f6", color: "white", border: "none", padding: "12px 12px", borderRadius: 10, cursor: "pointer", flexShrink: 0},
-  barsWrap: { display: "flex", alignItems: "flex-end", height: 360, gap: 2, background: "#181a2b", borderRadius: 14, padding: 10, marginTop: 16, overflow: "hidden"},
-  bar: { background: "#8b95b3", borderRadius: "6px 6px 0 0"},
-  note: { opacity: 0.7, fontSize: 12, marginTop: 8}
-};
-
+import "./Visualizer.css";
 const HL_COLORS = {
   compare: "#facc15",
   swap: "#ef4444",
@@ -119,7 +104,7 @@ export default function Visualizer({ algo }) {
   }, [algorithm, size]);
 
   useEffect(() => {
-    if (!playing) return;``
+    if (!playing) return;
     stop();
     play();
   }, [speed]);
@@ -129,42 +114,39 @@ export default function Visualizer({ algo }) {
   }, [algo]);
 
   return (
-    <div style={styles.bodyWrap}>
-    <div style={styles.app}>
-      <h1 style={styles.h1}>Algorithm Visualizer</h1>
+    <div className="visualizer-body">
+    <div className="visualizer-app">
 
       {/* Controls */}
-      <div style={styles.controls}>
-        <label style={styles.label}>
+      <div className="controls">
+        <label className="label">
           Size: <span style={{display: "inline-block", minWidth: 35, textAlign: "right"}}>{size}</span>
           <input
             type="range"
             min="5"
             max="50"
             value={size}
-            style={styles.range}
             onChange={e => setSize(Number(e.target.value))}
           />
         </label>
 
-        <label style = {styles.label}>
+        <label className="label">
           Speed (ms): <span style ={{display: "inline-block", minWidth: 52, textAlign: "right"}}>{speed}</span>
           <input    
             type="range"
             min="5"
             max="400"
             value={speed}
-            style={styles.range}
             onChange={e => setSpeed(Number(e.target.value))}
           />
         
-        <div style={styles.buttons}>
+        <div className="buttons">
           {!playing ? (
-            <button style={styles.btn} onClick={play}>Run</button>
+            <button className="btn" onClick={play}>Run</button>
           ) : (
-            <button style={styles.btn} onClick={stop}>Stop</button>
+            <button className="btn" onClick={stop}>Stop</button>
           )}
-          <button style={styles.btn} onClick={loadRun}>Shuffle</button>
+          <button className="btn" onClick={loadRun}>Shuffle</button>
         </div>
         </label>
       <div style={{gridColumn: "1 / -1"}}>
@@ -173,40 +155,31 @@ export default function Visualizer({ algo }) {
     </div>
 
       {/* Bars */}
-      <div style={styles.barsWrap}>
+      <div className="bars-wrap">
         {displayArray.map((v, i) => {
           const isHL = highlightIndices?.includes?.(i);
-          let bg = isHL ? HL_COLORS[highlightType] || styles.bar.background : styles.bar.background;
+          let bg = isHL ? HL_COLORS[highlightType] || undefined : undefined;
           if (finalized.includes(i)) {
             bg = HL_COLORS.mark_final;
           }
           return (
             <div
               key={i}
+              className="bar"
               style={{
                 width: barWidth,
                 height: `${(v / Math.max(...displayArray)) * 100}%`,
                 background: bg,
-                borderRadius: "4px 4px 0 0",
-                transition: "height 0.4s ease",
               }}
             />
           );
         })}
       </div>
 
-      <div style={{...styles.note, display: "flex", gap: 14, alignItems: "center", gap: 4}}>
+      <div className="legend">
         {LEGEND.map(l => (
           <span key={l.type} style ={{display: "flex", alignItems: "center", gap: 4}}>
-            <span style={{
-              display: "inline-block",
-              width: 16,
-              height: 12,
-              background: l.color,
-              borderRadius: 3,
-              marginRIght: 3,
-              border: "1px solid #2226"
-            }} />
+            <span className="legend-box" style={{background: l.color}} />
             <span>{l.desc}</span>
           </span>
         ))}

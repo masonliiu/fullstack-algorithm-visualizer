@@ -1,0 +1,116 @@
+.visualizer-body {
+    min-height: 100vh;
+    background: linear-gradient(200deg, #343944, #050e25);
+    color: #e0e6f7;
+    font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.visualizer-app {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px), saturate(180%);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    animation: fadeIn 1s ease forwards;
+}
+
+.visualizer-app h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.7);
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 20px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.controls label {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-weight: 500;
+}
+
+.controls input[type="range"] {
+    accent-color: #4da6ff;
+    cursor: pointer;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.btn {
+    background: linear-gradient(135deg, #4da6ff, #2563eb);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 0 12px rgba(77, 166, 255, 0.7);
+}
+
+.bars-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 360px;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 20px;
+}
+
+.bar {
+    background: #8b95b3;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s ease, background 0.3s ease;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-box {
+    width: 16px;
+    height: 12px;
+    border-radius: 3px;
+}
