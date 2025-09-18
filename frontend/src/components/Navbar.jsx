@@ -29,6 +29,7 @@ export default function Navbar() {
                 <Link to="/sorting/bubble" className="navbar-link">Bubble Sort</Link>
                 <Link to="/sorting/insertion" className="navbar-link">Insertion Sort</Link>
                 <Link to="/sorting/selection" className="navbar-link">Selection Sort</Link>
+                <Link to="/sorting/merge" className="navbar-link">Merge Sort</Link>
             </div>
 
             <div className="navbar-socials">

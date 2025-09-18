@@ -64,6 +64,12 @@ export default function Home() {
                         difficulty="Easy"
                         linkTo="sorting/selection"
                     />
+                    <AlgorithmCard
+                        title="Merge Sort"
+                        description="Looks through the array to find the smallest value, then swaps it into the first position. Then it finds the next smallest and swaps it into the second position, and so on until sorted."
+                        difficulty="Medium"
+                        linkTo="sorting/merge"
+                    />
                 </div>
             </div>
         </div>

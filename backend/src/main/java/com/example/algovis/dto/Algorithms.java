@@ -21,9 +21,9 @@ public class Algorithms {
             case "selection":
                 steps = selection(arr);
                 break;
-            // case "merge":
-            //     steps = merge(arr):
-            //     break;
+            case "merge":
+                steps = merge(arr);
+                break;
             // case "heap":
             //     steps = heap(arr);
             //     break;
@@ -120,12 +120,76 @@ public class Algorithms {
         return steps;
     }
 
-    // // Merge sort
-    // private static List<Step> merge(int[] arr) {
-        
-    // }
+    // Merge sort
+    private static List<Step> merge(int[] arr) {
+        List<Step> steps = new ArrayList<>();
+        mergeSort(arr, 0, arr.length - 1, steps);
+        for (int i = 0; i < arr.length; i++) {
+            steps.add(Step.markFinal(i, arr));
+        }
+        return steps;
+    }
 
-    // // Heap sort
+    private static void mergeSort(int[] arr, int left, int right, List<Step> steps) {
+        if (left >= right) return;
+        int mid = (left + right) / 2;
+        mergeSort(arr, left, mid, steps);
+        mergeSort(arr, mid+1, right, steps);
+        merge(arr, left, mid, right, steps);
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right, List<Step> steps) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int[] leftArr = new int[n1];
+        int[] rightArr = new int[n2];
+
+        System.arraycopy(arr, left, leftArr, 0, n1);
+        System.arraycopy(arr, mid + 1, rightArr, 0, n2);
+
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            steps.add(Step.compare(left + i, mid + 1 + j, arr));
+            if (leftArr[i] <= rightArr[j]) {
+                if (arr[k] != leftArr[i]) {
+                    arr[k] = leftArr[i];
+                    steps.add(Step.swap(k, left + i, arr));
+                    steps.add(Step.snapshot(arr));
+                }
+                i++;
+            } else {
+                if (arr[k] != rightArr[j]) {
+                    arr[k] = rightArr[j];
+                    steps.add(Step.swap(k, mid + 1 + j, arr));
+                    steps.add(Step.snapshot(arr));
+                }
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            if (arr[k] != leftArr[i]) {
+                arr[k] = leftArr[i];
+                steps.add(Step.swap(k, left + i, arr));
+                steps.add(Step.snapshot(arr));
+            }
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            if (arr[k] != rightArr[j]) {
+                arr[k] = rightArr[j];
+                steps.add(Step.swap(k, mid + 1 + j, arr));
+                steps.add(Step.snapshot(arr));
+            }
+            j++;
+            k++;
+        }
+    }
+    // Heap sort
     // private static List<Step> heap(int[] arr) {
         
     // }
