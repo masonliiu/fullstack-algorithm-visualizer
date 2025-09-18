@@ -27,6 +27,7 @@
 }
 
 .navbar-link {
+    position: relative;
     text-decoration: none;
     color: #e0e6f7;
     font-weight: 700;
@@ -35,7 +36,22 @@
 
 .navbar-link:hover {
     color: #4da6ff;
-    text-shadow: 0 0 10px rgba(77, 166, 255, 0.8);
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.9), 0 0 16px rgba(77, 166, 255 ,0.6);
+}
+
+.navbar-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background: #4da6ff;
+    box-shadow: 0 0 8px rgba(77, 166, 255, 0.9), 0 0 12px rgba(77, 166, 255, 0.6);
+    transition: width 0.3s ease;
+}
+.navbar-link:hover::after {
+    width: 100;
 }
 
 .navbar-socials {
@@ -46,12 +62,35 @@
 }
 
 .social-link {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: #e0e6f7;
-    transition: color 0.25s ease, transform 0.25s ease;
+    text-shadow: none;
+    transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
 }
 
-.social-link:hover {
-    color: #4da6ff;
-    transform: scale(1.2);
+/* GitHub: purple glow */
+.social-link.github:hover {
+    color: #a971f5;
+    transform: scale(1.25);
+    text-shadow: 0 0 8px rgba(169, 113, 245, 0.9),
+                 0 0 16px rgba(169, 113, 245, 0.7),
+                 0 0 24px rgba(169, 113, 245, 0.6);
+}
+
+/* LinkedIn: blue glow */
+.social-link.linkedin:hover {
+    color: #0a66c2;
+    transform: scale(1.25);
+    text-shadow: 0 0 8px rgba(10, 102, 194, 0.9),
+                 0 0 16px rgba(10, 102, 194, 0.7),
+                 0 0 24px rgba(10, 102, 194, 0.6);
+}
+
+/* Instagram: pink/orange glow */
+.social-link.instagram:hover {
+    color: #e1306c;
+    transform: scale(1.25);
+    text-shadow: 0 0 8px rgba(225, 48, 108, 0.9),
+                 0 0 16px rgba(255, 90, 0, 0.7),
+                 0 0 24px rgba(255, 0, 128, 0.6);
 }

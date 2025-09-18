@@ -18,7 +18,7 @@ export default function Navbar() {
                     href="https://github.com/masonliiu"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link"
+                    className="social-link github"
                 >
                     <FaGithub />
                 </a>
@@ -26,7 +26,7 @@ export default function Navbar() {
                     href="https://linkedin.com/in/masonliiu"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link"
+                    className="social-link linkedin"
                 >
                     <FaLinkedin />
                 </a>
@@ -34,7 +34,7 @@ export default function Navbar() {
                     href="https://instagram.com/mason_liuu"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link"
+                    className="social-link instagram"
                 >
                     <FaInstagram />
                 </a>
