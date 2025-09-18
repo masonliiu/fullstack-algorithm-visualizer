@@ -5,7 +5,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -72,4 +71,9 @@ html, body, #root {
   width: 100%;
   margin: 0;
   padding: 0;
+  background: linear-gradient(200deg, #343944, #050e25);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: #e0e6f7;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

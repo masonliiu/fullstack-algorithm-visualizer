@@ -117,7 +117,6 @@ export default function Visualizer({ algo }) {
     <div className="visualizer-body">
     <div className="visualizer-app">
 
-      {/* Controls */}
       <div className="controls">
         <label className="label">
           Size: <span style={{display: "inline-block", minWidth: 35, textAlign: "right"}}>{size}</span>
@@ -154,7 +153,6 @@ export default function Visualizer({ algo }) {
       </div>   
     </div>
 
-      {/* Bars */}
       <div className="bars-wrap">
         {displayArray.map((v, i) => {
           const isHL = highlightIndices?.includes?.(i);

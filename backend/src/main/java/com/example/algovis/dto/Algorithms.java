@@ -65,6 +65,7 @@ public class Algorithms {
             }
             steps.add(Step.markFinal(n - 1 - i, arr));
         }
+        steps.add(Step.markFinal(0, arr));
         return steps;
 
     }
@@ -92,7 +93,6 @@ public class Algorithms {
         for (int i = 0; i < n; i++) {
             steps.add(Step.markFinal(i, arr));
         }
-
         return steps;
     }
     // Selection sort
@@ -116,6 +116,7 @@ public class Algorithms {
             }
             steps.add(Step.markFinal(i, arr));
         }
+        steps.add(Step.markFinal(n-1, arr));
         return steps;
     }
 

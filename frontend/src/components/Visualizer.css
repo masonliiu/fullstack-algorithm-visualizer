@@ -1,11 +1,15 @@
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 .visualizer-body {
-    min-height: 100vh;
-    background: linear-gradient(200deg, #343944, #050e25);
-    color: #e0e6f7;
-    font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    margin: 0;
     display: flex;
     justify-content: center;
     padding: 40px;
+    box-sizing: border-box;
 }
 
 .visualizer-app {
@@ -15,7 +19,7 @@
     backdrop-filter: blur(12px), saturate(180%);
     border-radius: 20px;
     padding: 2rem;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 8px 30px rgba(64, 56, 56, 0.35);
     animation: fadeIn 1s ease forwards;
 }
 
@@ -31,12 +35,14 @@
 .controls {
     display: grid;
     grid-template-columns: auto auto 1fr;
-    gap: 20px;
+    gap: 14px;
     align-items: center;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     padding: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    padding-top: 18px;
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -50,6 +56,7 @@
 .controls input[type="range"] {
     accent-color: #4da6ff;
     cursor: pointer;
+    align-items: center;
 }
 
 .buttons {
@@ -92,7 +99,7 @@
 .bar {
     background: #8b95b3;
     border-radius: 4px 4px 0 0;
-    transition: height 0.3s ease, background 0.3s ease;
+    transition: height 0.3s ease, background 0.1s ease;
 }
 
 .legend {
