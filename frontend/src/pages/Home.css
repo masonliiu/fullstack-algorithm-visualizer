@@ -23,6 +23,7 @@ body {
     color: #fff;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
     -webkit-fill-color: initial;
+    background-clip: initial;
     -webkit-background-clip: initial;
 }
 

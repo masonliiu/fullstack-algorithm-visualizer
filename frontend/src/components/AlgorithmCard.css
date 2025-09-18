@@ -7,7 +7,7 @@
     border-radius: 16px;
     color: white;
     max-width: 280px;
-    min-height: 180px;
+    max-height: 150px;
     box-shadow: 0 0 10px rgba(77, 166, 255, 0.5);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     cursor: pointer;
@@ -28,10 +28,16 @@
   }
   
   .description {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.4;
     opacity: 0.85;
     flex-grow: 1;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .card-footer {
