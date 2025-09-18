@@ -13,7 +13,7 @@ body {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-}
+}   
 
 .home-title {
     font-size: 2.5rem;
@@ -27,14 +27,58 @@ body {
     -webkit-background-clip: initial;
 }
 
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    width: 60%;
-    max-width: 1200px;
-    margin-top: 20px;
+.hero-section {
+    margin-top: 200px;
+    margin-bottom: 50px;
+    max-width: 800px;
     animation: fadeIn 1s ease forwards;
 }
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(77, 166, 255, 0.7);
+}
+
+.hero-tagline {
+    font-size: 1.3rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.hero-button {
+    background: linear-gradient(135deg, #4da6ff, #2563eb);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin-bottom: 300px;
+    margin-top: 20px;
+}
+
+.sorting-section {
+    margin-top: 120px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.sorting-section.hidden {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.sorting-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
