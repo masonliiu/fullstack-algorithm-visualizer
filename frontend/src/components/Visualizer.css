@@ -114,13 +114,14 @@ html, body, #root {
 
 .bar-label {
     font-size: 12px;
+    font-weight: 700;
     color: #fff;
     margin-top: 4px;
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
 }
 
 .bar.highlight {
-    box-shadow: 0 0 12px rgba(77, 166, 255, 0.8;
+    box-shadow: 0 0 12px rgba(77, 166, 255, 0.8);
     transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 

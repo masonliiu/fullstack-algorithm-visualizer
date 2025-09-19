@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
@@ -8,28 +8,58 @@ export default function Navbar() {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 80) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
+            setScrolled(window.scrollY > 80);
         };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        const throttled = () => {
+            requestAnimationFrame(handleScroll);
+        };
+        window.addEventListener("scroll", throttled);
+        return () => window.removeEventListener("scroll", throttled);
     }, []);
 
     return (
         <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
             <div className="navbar-logo">
-                <Link to="/" className="navbar-link">Algorithm Visualizer</Link>
+                <Link to="/" className="navbar-link">Home</Link>
             </div>
 
             <div className="navbar-center">
-                <Link to="/" className="navbar-link">Home</Link>
-                <Link to="/sorting/bubble" className="navbar-link">Bubble Sort</Link>
-                <Link to="/sorting/insertion" className="navbar-link">Insertion Sort</Link>
-                <Link to="/sorting/selection" className="navbar-link">Selection Sort</Link>
-                <Link to="/sorting/merge" className="navbar-link">Merge Sort</Link>
+                <NavLink 
+                    to="/sorting/bubble" 
+                    className={({ isActive }) => 
+                        "navbar-link" + (isActive ? " active" : "")
+                    }
+                    end
+                >   
+                    Bubble Sort
+                </NavLink>
+                <NavLink 
+                    to="/sorting/insertion" 
+                    className={({ isActive }) => 
+                        "navbar-link" + (isActive ? " active" : "")
+                    }
+                    end
+                >   
+                    Insertion Sort
+                </NavLink>
+                <NavLink 
+                    to="/sorting/selection" 
+                    className={({ isActive }) => 
+                        "navbar-link" + (isActive ? " active" : "")
+                    }
+                    end
+                >   
+                    Selection Sort
+                </NavLink>
+                <NavLink 
+                    to="/sorting/merge" 
+                    className={({ isActive }) => 
+                        "navbar-link" + (isActive ? " active" : "")
+                    }
+                    end
+                >   
+                    Merge Sort
+                </NavLink>
             </div>
 
             <div className="navbar-socials">

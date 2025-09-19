@@ -44,7 +44,7 @@
 
 .navbar-logo {
     position: absolute;
-    left: 2rem;
+    left: 3rem;
     top: 0;
     font-size: 1.2rem;
     height: var(--pod-h);
@@ -53,12 +53,11 @@
     opacity: 1;
     transform: translateX(0);
     pointer-events: auto;
-    transition: transform 500ms ease, opacity 450ms ease;
+    transition: transform 500ms ease, left 500ms cubic-bezier(.22, .61, .36, 1);
 }
 
 .navbar.scrolled .navbar-logo {
-    opacity: 0;
-    transform: translateX(60px);
+    left: calc(50% - (var(--pod-w) / 2) + var(--pod-pad-x));
 }
 
 .navbar-center {
@@ -85,6 +84,15 @@
 .navbar-link:hover {
     color: #4da6ff;
     text-shadow: 0 0 10px rgba(77, 166, 255, 0.9), 0 0 16px rgba(77, 166, 255 ,0.6);
+}
+
+.navbar-link.active {
+    color: #4da6ff;
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.9), 0 0 16px rgba(77, 166, 255, 0.6);
+}
+
+.navbar-link.active::after {
+    width: 100%;
 }
 
 .navbar-link::after {
