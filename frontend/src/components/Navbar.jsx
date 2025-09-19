@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
@@ -20,7 +21,18 @@ export default function Navbar() {
     return (
         <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
             <div className="navbar-logo">
-                <Link to="/" className="navbar-link">Home</Link>
+                <Link
+                    to="/"
+                    className="navbar-link"
+                    onClick={e => {
+                        if(window.location.pathname === "/") {
+                            e.preventDefault();
+                            window.scrollTo({ top: 0, behavior: "smooth"} );
+                        }
+                    }}
+                >
+                    Home
+                </Link>
             </div>
 
             <div className="navbar-center">
