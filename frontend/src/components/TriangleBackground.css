@@ -1,0 +1,36 @@
+.triangle-container {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  
+  .triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 14px solid rgba(255, 255, 255, 0);
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+    animation: fall 15s linear forwards;
+  }
+  
+  @keyframes fall {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px) rotate(0deg) scale(0.8);
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(100vh) rotate(180deg) scale(1.2);
+    }
+  }
