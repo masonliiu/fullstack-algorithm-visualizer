@@ -1,8 +1,15 @@
 import AlgorithmCard from "../components/AlgorithmCard";
 import "./Home.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+    const [phraseIndex, setPhraseIndex] = useState(0);
+    const phrases = [
+        "sorting algorithms",
+        "graphing algorithms",
+        "pathfinding algorithms",
+        "sorting algorithms"
+    ]
     const scrollToCards = () => {
         const grid = document.querySelector(".card-grid");
         if (grid) {
@@ -27,17 +34,25 @@ export default function Home() {
             { threshold: 0.5 }
         );
         observer.observe(sortingSection);
-
         return () => {
             if (sortingSection) observer.unobserve(sortingSection);
         };
     }, []);
+
     return (
         <div className="home-container">
             <div className="hero-section">
                 <h1 className="hero-title">Algorithm Visualizer</h1>
                 <p className="hero-tagline">
-                    Learn sorting algorithms step by step through interactive animations.
+                    Learn {" "}
+                    <span className="hero-cycle"> 
+                        <span className="hero-cycle-inner">
+                            {phrases.map((p, i) => (
+                                <span key={i}>{p}</span>
+                            ))}
+                        </span>
+                    </span>{" "}
+                    step by step through interactive animations.
                 </p>
                 <button className="hero-button" onClick={scrollToCards}>
                     Get Started ↓

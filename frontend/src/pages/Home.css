@@ -4,6 +4,7 @@ body {
     background: linear-gradient(200deg, #343944, #050e25);
     min-height: 100vh;
     color: #fff;
+
 }
 
 .home-container {
@@ -43,7 +44,7 @@ body {
 }
 
 .hero-tagline {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 400;
     opacity: 0.9;
     margin-bottom: 30px;
@@ -77,6 +78,56 @@ body {
     transform: translateY(0) scale(0.98);
     box-shadow: 0 0 10px rgba(77, 166, 255, 0.7);
 }
+
+.hero-cycle {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    height: 1.5em;
+    vertical-align: bottom;
+    text-align: center;
+}
+
+.hero-cycle-inner span {
+    line-height: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.hero-cycle-inner {
+    display: grid;
+    flex-direction: column;
+    animation: rollDown 6s infinite ease-in-out;
+    transform: translateY(0);
+}
+
+.hero-cycle-inner span:nth-child(1) {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 1.3em;
+}
+
+.hero-cycle-inner span:nth-child(2) {
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.hero-cycle-inner span:nth-child(3) {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+.hero-cycle-inner span:nth-child(4) {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 1.3em;
+}
+
 
 .card-grid {
     display: grid;
@@ -114,3 +165,18 @@ body {
         transform: translateY(0);
     }
 }
+
+@keyframes rollDown {
+    0%, 20% {
+      transform: translateY(-2.5%);    
+    }
+    33%, 53% {
+      transform: translateY(-26%);   
+    }
+    65%, 85% {
+      transform: translateY(-50%);  
+    }
+    100% {
+      transform: translateY(-75%);    
+    }
+  }
