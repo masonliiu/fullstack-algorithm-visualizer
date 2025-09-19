@@ -16,7 +16,7 @@ html, body, #root {
     width: 100%;
     max-width: 1000px;
     background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px), saturate(180%);
+    backdrop-filter: blur(500px), saturate(700%);
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 8px 30px rgba(64, 56, 56, 0.35);
@@ -114,7 +114,7 @@ html, body, #root {
 
 .bar-label {
     font-size: 12px;
-    font-weight: 700;
+    font-weight: ;
     color: #fff;
     margin-top: 4px;
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);

@@ -15,7 +15,7 @@
     border-bottom: 14px solid rgba(255, 255, 255, 0);
     opacity: 0;
     transform: translateY(0) rotate(0deg);
-    animation: fall 15s linear forwards;
+    animation: fall 4s linear forwards;
   }
   
   @keyframes fall {
@@ -26,11 +26,8 @@
     10% {
       opacity: 1;
     }
-    90% {
-      opacity: 1;
-    }
-    100% {
+    55% {
       opacity: 0;
-      transform: translateY(100vh) rotate(180deg) scale(1.2);
+      transform: translateY(55vh) rotate(180deg) scale(1.2);
     }
   }
