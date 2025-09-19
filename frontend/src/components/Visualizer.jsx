@@ -41,6 +41,7 @@ export default function Visualizer({ algo }) {
   const highlightIndices = current.indices || [];
 
   const barWidth = Math.max(2, Math.floor(900/ Math.max(1, displayArray.length)));
+  const maxValue = Math.max(...displayArray, 1);
 
   async function loadRun() {
     setPlaying(false);
@@ -161,15 +162,25 @@ export default function Visualizer({ algo }) {
             bg = HL_COLORS.mark_final;
           }
           return (
-            <div
-              key={i}
-              className="bar"
-              style={{
-                width: barWidth,
-                height: `${(v / Math.max(...displayArray)) * 100}%`,
-                background: bg,
+            <div className="bar-container" key={i}
+              style={{ 
+                display: "flex", 
+                flexDirection: "column",
+                alignItems: "center",
+                flex: "1",
+                justifyContent: "flex-end"
               }}
-            />
+            >
+              <div
+                className="bar"
+                style={{
+                  width: barWidth,
+                  height: `${(v / maxValue) * 320}px`,
+                  background: bg || "#8b95b3",
+                }}
+              />
+              <span className="bar-label">{v}</span>
+            </div>
           );
         })}
       </div>
