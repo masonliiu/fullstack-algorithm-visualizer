@@ -1,7 +1,7 @@
-# Fullstack Algorithm Visualizer 2.0
+# Fullstack Algorithm Visualizer
 
 In progress still.        
-Adding Merge sort, Quick sort, Heap sort; touching up stylization via css, adding new algorithms.
+Adding Quick sort, Heap sort; touching up stylization via css, adding new algorithms.
 
 # Techstack: 
 
