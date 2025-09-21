@@ -78,6 +78,5 @@ html, body, #root {
   color: #e0e6f7;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   scroll-behavior: smooth;
-  overflow-y: scroll;
 }
 
