@@ -6,9 +6,9 @@
 }
 
 .navbar {
-    position: sticky;
+    position: fixed;
     top: var(--nav-top-offset);
-    z-index: 1000;  
+    z-index: 2000;  
     width: 100%;
     height: var(--pod-h);
     pointer-events: none;

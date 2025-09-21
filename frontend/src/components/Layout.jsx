@@ -7,6 +7,11 @@ export default function Layout({ children }) {
     const [offsetY, setOffsetY] = useState(0);
 
     useEffect(() => {
+        window.history.scrollRestoration = "manual";
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const handleScroll = () => {
             setOffsetY(window.scrollY);
         };
@@ -17,7 +22,7 @@ export default function Layout({ children }) {
         <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative", overflowX: "hidden" }}>
             <div
                 className="triangle-parallax"
-                style={{ transform: `translateY(${offsetY * 0.2}px)` }}
+                style={{ transform: `translateY(${offsetY * -1.5}px)` }}
             >
                 <TriangleBackground />
             </div>
