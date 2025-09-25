@@ -52,7 +52,7 @@ body {
 }
 
 .hero-button {
-    background: rgb(151, 165, 175);
+    background: rgb(147, 163, 174);
     backdrop-filter: blur(12px), saturate(180%);
     border: 2px solid rgba(209, 190, 190, 0.25);
     color: #fff;
@@ -70,7 +70,7 @@ body {
 
 .hero-button:hover {
     transform: translateY(-3px) scale(1.05);
-    background: linear-gradient(135deg, #5bb8ff, #3b7ff0);
+    background: linear-gradient(135deg, #5bb8ff, #6ba1f9);
     box-shadow: 0 0 15px rgba(77, 166, 255, 0.9),
                 0 0 25px rgba(77, 166, 255, 0.7),
                 0 0 40px rgba(37, 99, 235, 0.6);

@@ -8,7 +8,7 @@
     color: white;
     max-width: 280px;
     max-height: 150px;
-    box-shadow: 0 0 10px rgba(77, 166, 255, 0.5);
+    box-shadow: 0 0 10px rgba(217, 225, 235, 0.5);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     cursor: pointer;
     display: flex;
@@ -63,15 +63,15 @@
   }
   .difficulty.easy {
     background: rgba(34, 197, 04, 0.7);
-    box-shadow: 0 0 12px rgba(34, 197, 04, 1);
+    box-shadow: 0 0 8px rgba(34, 197, 04, 1);
   }
   .difficulty.medium {
     background: rgba(234, 179, 8, 0.8); 
-    box-shadow: 0 0 12px rgba(234, 179, 8, 1);
+    box-shadow: 0 0 8px rgba(234, 179, 8, 1);
   }
   .difficulty.hard {
     background: rgba(239, 68, 68, 0.7);
-    box-shadow: 0 0 12px rgba(239, 68, 68, 1);
+    box-shadow: 0 0 8px rgba(239, 68, 68, 1);
   }
   .visualize {
     font-size: 14px;

@@ -190,8 +190,10 @@ public class Algorithms {
         }
     }
     // Heap sort
-    // private static List<Step> heap(int[] arr) {
+    private static List<Step> heap(int[] arr) {
+        List<Step> steps = new ArrayList<>();
+        return steps;
         
-    // }
+    }
 
 }
