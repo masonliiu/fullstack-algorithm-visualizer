@@ -14,7 +14,7 @@ html, body, #root {
 
 .visualizer-app {
     width: 100%;
-    max-width: 1000px;
+    max-width: 90rem;
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(500px), saturate(700%);
     border-radius: 20px;

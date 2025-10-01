@@ -10,7 +10,9 @@
   
   .card {
     background: rgba(255, 255, 255, 0.08);
-    padding: 16px;
+    padding: 8px;
+    padding-left: 16px;
+    padding-top: 0%;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
