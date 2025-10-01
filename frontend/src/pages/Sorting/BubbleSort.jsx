@@ -5,7 +5,49 @@ export default function BubbleSort() {
     return (
         <div style={{ padding: "32px", minHeight: "100vh", paddingTop: "130px", color: "white"}}>
             <h1>Bubble Sort</h1>
-            <p>Repeatedly compares adjacent elements based on value, swapping them until the largest items “bubble up” to the end of the list.</p>
+
+            <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "20px",
+                marginBottom: "40px"
+            }}>
+                <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"}}>
+                    <h2>Concept</h2>
+                    <p>
+                        Repeatedly compares adjacent elements based on value, swapping them until the largest items “bubble up” to the end of the list.
+                    </p>
+                </div>
+
+                <div style={{
+                    background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"
+                }}>
+                    <h2>Pseudocode</h2>
+                    <pre style={{ whiteSpace: "pre-wrap"}}>
+                        {`for i from 0 to n-1:
+                            for j from 0 to n-i-1:
+                            if arr`}
+                    </pre>
+                </div>
+
+                <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"}}>
+                    <h2>Complexity</h2>
+                    <ul>
+                        <li>Best: O(n)</li>
+                        <li>Average: O(n²)</li>
+                        <li>Worst: O(n²)</li>
+                    </ul>
+                </div>
+
+                <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"}}>
+                    <h2>Use Cases</h2>
+                    <p>
+                        Bubble sort is typically used for teaching purposes.
+                        It is rarely used in production, but good for understanding sorting basics.
+                    </p>
+                </div>
+            </div>
+
             <Visualizer algo ="bubble" />
 
             <div className="relatedAlgorithms">
