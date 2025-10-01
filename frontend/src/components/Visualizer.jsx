@@ -16,7 +16,7 @@ const LEGEND = [
 
 export default function Visualizer({ algo }) {
   const [algorithm, setAlgorithm] = useState(algo || "bubble");
-  const [size, setSize] = useState(15);
+  const [size, setSize] = useState(10);
   const [speed, setSpeed] = useState(300);
   const [playing, setPlaying] = useState(false);
 
