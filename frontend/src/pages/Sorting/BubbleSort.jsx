@@ -1,55 +1,52 @@
 import Visualizer from "../../components/Visualizer";
 import AlgorithmCard from "../../components/AlgorithmCard";
+import "../../styles/AlgorithmLayout.css";
 
 export default function BubbleSort() {
     return (
-        <div style={{ padding: "32px", minHeight: "100vh", paddingTop: "130px", color: "white"}}>
+        <div className="algorithm-container">
             <h1>Bubble Sort</h1>
 
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "20px",
-                marginBottom: "40px"
-            }}>
-                <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"}}>
-                    <h2>Concept</h2>
-                    <p>
-                        Repeatedly compares adjacent elements based on value, swapping them until the largest items “bubble up” to the end of the list.
-                    </p>
-                </div>
-
-                <div style={{
-                    background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"
-                }}>
-                    <h2>Pseudocode</h2>
-                    <pre style={{ whiteSpace: "pre-wrap"}}>
-                        {`for i from 0 to n-1:
-                            for j from 0 to n-i-1:
-                            if arr`}
-                    </pre>
-                </div>
-
-                <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"}}>
-                    <h2>Complexity</h2>
-                    <ul>
-                        <li>Best: O(n)</li>
-                        <li>Average: O(n²)</li>
-                        <li>Worst: O(n²)</li>
-                    </ul>
-                </div>
-
-                <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "20px", borderRadius: "12px"}}>
+            <div className="card concept-card">
+                <h2>Concept</h2>
+                <p>
+                    Repeatedly compares adjacent elements based on value, swapping them until the largest items “bubble up” to the end of the list.
+                </p>
+            </div>
+            <div className="algorithm-grid">
+                <div className="card use-cases-card">
                     <h2>Use Cases</h2>
                     <p>
                         Bubble sort is typically used for teaching purposes.
                         It is rarely used in production, but good for understanding sorting basics.
                     </p>
                 </div>
+
+                <div className="visualizer-wrapper">
+                    <Visualizer algo="bubble" />
+                </div>
+
+                <div className="card-stack">
+                    <div className="card">
+                        <h2>Pseudocode</h2>
+                        <pre>
+    {`for i from 0 to n-1:
+    for j from 0 to n-i-1:
+        if arr[j] > arr[j+1]:
+            swap arr[j], arr[j+1]`}
+                        </pre>
+                    </div>
+
+                    <div className="card">
+                        <h2>Complexity</h2>
+                        <ul>
+                            <li>Best: O(n)</li>
+                            <li>Average: O(n²)</li>
+                            <li>Worst: O(n²)</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-            <Visualizer algo ="bubble" />
-
             <div className="relatedAlgorithms">
                 <h2>More Sorting Algorithms</h2>
                 <div className="card-grid" style={{ gap: "16px"}}>

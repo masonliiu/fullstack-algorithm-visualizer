@@ -1,0 +1,72 @@
+.algorithm-container {
+    padding: 32px;
+    padding-top: 130px;
+    min-height: 100vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .card {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  .concept-card {
+    width: 99.3%;
+  }
+
+  .algorithm-grid {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr) 300px;
+    grid-template-rows: auto;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .use-cases-card {
+    grid-column: 1;
+  }
+  .card-stack {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .visualizer-wrapper {
+    grid-column: 2;
+    grid-row: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    min-width: 0;
+    min-height: 400px;
+    max-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .visualizer-wrapper canvas,
+  .visualizer-wrapper > div {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 1100px) {
+    .algorithm-grid {
+        grid-template-columns: 1fr;
+    }
+    .card-stack {
+        flex-direction: column;
+    }
+  }
