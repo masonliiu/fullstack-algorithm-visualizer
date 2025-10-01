@@ -83,33 +83,27 @@ html, body, #root {
 }
 
 .bars-wrap {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 360px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2px, 1fr));
     gap: 4px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 14px;
-    padding: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    margin-bottom: 20px;
-    position: relative;
-}
+    align-items: end;
+    height: 360px;
+  }
 
 .bar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    flex: 1;
+    flex: 0 0 auto;
+    margin: 0;
 }
 
 .bar {
     background: #8b95b3;
     border-radius: 4px 4px 0 0;
     transition: height 0.3s ease, background 0.15s ease;
-    width: 100%;
+    border: 1px solid rgba(255,255,255,0.4);
 }
 
 .bar-label {
@@ -131,6 +125,7 @@ html, body, #root {
 
 
 .legend {
+    margin-top: 2%;
     display: flex;
     justify-content: center;
     gap: 20px;

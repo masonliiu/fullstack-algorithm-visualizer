@@ -40,8 +40,27 @@ export default function Visualizer({ algo }) {
   const highlightType = (current.type || "").toLowerCase();
   const highlightIndices = current.indices || [];
 
-  const barWidth = Math.max(2, Math.floor(900/ Math.max(1, displayArray.length)));
+  const gap = 4;
+  const totalGap = gap * (displayArray.length-1);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const containerRef = useRef(null);
+  const barWidth = Math.max(2, Math.floor((containerWidth - 24 - totalGap) / displayArray.length));
   const maxValue = Math.max(...displayArray, 1);
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new window.ResizeObserver(entries => {
+      if (entries[0]) {
+        setContainerWidth(entries[0].contentRect.width);
+      }
+    });
+    observer.observe(containerRef.current);
+
+    //initial width
+    setContainerWidth(containerRef.current.getBoundingClientRect().width);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   async function loadRun() {
     setPlaying(false);
@@ -154,7 +173,7 @@ export default function Visualizer({ algo }) {
       </div>   
     </div>
 
-      <div className="bars-wrap">
+      <div className="bars-wrap" ref={containerRef}>
         {displayArray.map((v, i) => {
           const isHL = highlightIndices?.includes?.(i);
           let bg = isHL ? HL_COLORS[highlightType] || undefined : undefined;
@@ -167,19 +186,22 @@ export default function Visualizer({ algo }) {
                 display: "flex", 
                 flexDirection: "column",
                 alignItems: "center",
-                flex: "1",
                 justifyContent: "flex-end"
               }}
             >
               <div
                 className="bar"
                 style={{
-                  width: barWidth,
+                  width: `${barWidth}px`,
                   height: `${(v / maxValue) * 320}px`,
                   background: bg || "#8b95b3",
                 }}
               />
-              <span className="bar-label">{v}</span>
+              <span className="bar-label"
+              style={{ fontSize: `${Math.min(14, Math.max(8, barWidth * 0.6))}px` }}
+              >
+                {v}
+              </span>
             </div>
           );
         })}
