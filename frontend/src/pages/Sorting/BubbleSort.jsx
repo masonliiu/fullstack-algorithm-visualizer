@@ -42,7 +42,7 @@ export default function BubbleSort() {
                             <li>
                             <span 
                                 className="tooltip" 
-                                data-tooltip="O(n) means linear growth — the time grows directly with the size of the list.">
+                                data-tooltip="O(n) means linear growth — the execution time grows directly with the size of the list.">
                                 Best: O(n)
                             </span>
                             </li>
@@ -56,7 +56,7 @@ export default function BubbleSort() {
                             <li>
                             <span 
                                 className="tooltip" 
-                                data-tooltip="O(n²) in the worst case means every item must be compared and swapped, very inefficient for large lists.">
+                                data-tooltip="O(n²) in the worst case means every item must be compared and swapped: very inefficient for large lists.">
                                 Worst: O(n²)
                             </span>
                             </li>

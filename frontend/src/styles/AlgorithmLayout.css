@@ -49,6 +49,7 @@
     position: relative;
     cursor: help;
     border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+    transition: color 0.3s ease;
   }
 
   .tooltip:hover {
@@ -73,7 +74,7 @@
 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    animation: fadeIn2 0.15s ease forwards;
+    animation: fadeIn2 0.3s ease forwards;
   }
   
   .use-cases-card {
@@ -91,8 +92,8 @@
     grid-column: 2;
     grid-row: 1;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 20px;
+    padding: 15px;
     min-height: 400px;
     max-height: 600px;
     display: flex;

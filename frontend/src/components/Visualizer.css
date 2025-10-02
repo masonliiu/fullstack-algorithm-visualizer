@@ -18,7 +18,8 @@ html, body, #root {
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(500px), saturate(700%);
     border-radius: 20px;
-    padding: 2rem;
+    padding: 2.5rem;
+    padding-top: 4rem;
     box-shadow: 0 8px 30px rgba(64, 56, 56, 0.35);
     animation: fadeIn 1s ease forwards;
 }
@@ -35,15 +36,16 @@ html, body, #root {
 .controls {
     display: grid;
     grid-template-columns: auto auto 1fr;
-    gap: 14px;
+    gap: 15px;
     align-items: center;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     padding: 16px;
     margin-bottom: 15px;
+    transform: translateY(-25px);
     padding-bottom: 5px;
     padding-top: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .controls label {
