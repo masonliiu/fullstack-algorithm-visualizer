@@ -52,7 +52,7 @@ body {
 }
 
 .hero-button {
-    background: rgb(147, 163, 174);
+    background: rgba(208, 225, 237, 0.736);
     backdrop-filter: blur(12px), saturate(180%);
     border: 2px solid rgba(209, 190, 190, 0.25);
     color: #fff;
@@ -61,7 +61,7 @@ body {
     letter-spacing: 1.2px;
     padding: 16px 12px;
     border-radius: 20px;
-    border: 0px;
+    border: 5px;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     box-shadow: 0 0 12px rgba(172, 182, 192, 0.6);
