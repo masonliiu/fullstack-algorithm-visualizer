@@ -17,9 +17,9 @@ export default function BubbleSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-                    {`for each item i in the list:
-                            if item[i] is greater than item[i+1]:
-                                swap item[i] and item[i+1]`}
+                        <span className="keyword">for each item i in the list:</span>{"\n"}
+                        <span className="condition">&nbsp;&nbsp;if item[i] is greater than item[i+1]:</span>{"\n"}
+                        <span className="action">&nbsp;&nbsp;&nbsp;&nbsp;swap item[i] and item[i+1]</span>
                     </pre>
                 </div>
 
@@ -39,9 +39,27 @@ export default function BubbleSort() {
                     <div className="card">
                         <h2>Complexity</h2>
                         <ul>
-                            <li>Best: O(n)</li>
-                            <li>Average: O(n²)</li>
-                            <li>Worst: O(n²)</li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n) means linear growth — the time grows directly with the size of the list.">
+                                Best: O(n)
+                            </span>
+                            </li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n²) means quadratic growth — the number of steps increases rapidly, making it much slower for large inputs.">
+                                Average: O(n²)
+                            </span>
+                            </li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n²) in the worst case means every item must be compared and swapped, very inefficient for large lists.">
+                                Worst: O(n²)
+                            </span>
+                            </li>
                         </ul>
                     </div>
                 </div>

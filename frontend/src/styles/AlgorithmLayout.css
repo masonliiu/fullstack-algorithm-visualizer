@@ -44,6 +44,43 @@
     margin: 0;
     padding: 8px 0;
   }
+
+  .keyword {
+    color: #4da6ff;
+    font-weight: bold;
+  }
+
+  .condition {
+    color: #facc15;
+  }
+
+  .action {
+    color: #22c55e;
+    font-style: italic;
+  }
+
+  .tooltip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+  }
+
+  .tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    bottom: 125%;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    width: max-content;
+    max-width: 220px;
+    white-space: normal;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
   .use-cases-card {
     grid-column: 1;
   }
