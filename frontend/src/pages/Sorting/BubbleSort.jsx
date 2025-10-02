@@ -14,12 +14,14 @@ export default function BubbleSort() {
                 </p>
             </div>
             <div className="algorithm-grid">
-                <div className="card use-cases-card">
-                    <h2>Use Cases</h2>
-                    <p>
-                        Bubble sort is typically used for teaching purposes.
-                        It is rarely used in production, but good for understanding sorting basics.
-                    </p>
+                <div className="card pseudocode-card">
+                    <h2>Pseudocode</h2>
+                    <pre>
+{`for each item i in the list:
+    for each item j from start to length - i - 1:
+        if the item at j is greater than the item at j+1:
+            swap the two items`}
+                    </pre>
                 </div>
 
                 <div className="visualizer-wrapper">
@@ -27,14 +29,12 @@ export default function BubbleSort() {
                 </div>
 
                 <div className="card-stack">
-                    <div className="card">
-                        <h2>Pseudocode</h2>
-                        <pre>
-    {`for i from 0 to n-1:
-    for j from 0 to n-i-1:
-        if arr[j] > arr[j+1]:
-            swap arr[j], arr[j+1]`}
-                        </pre>
+                    <div className="card use-cases-card">
+                        <h2>Use Cases</h2>
+                        <p>
+                            Bubble sort is typically used for teaching purposes.
+                            It is rarely used in production, but good for understanding sorting basics.
+                        </p>
                     </div>
 
                     <div className="card">
