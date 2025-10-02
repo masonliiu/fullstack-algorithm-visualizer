@@ -1,5 +1,6 @@
 import Visualizer from "../../components/Visualizer";
 import AlgorithmCard from "../../components/AlgorithmCard";
+import "../../styles/AlgorithmLayout.css";
 
 export default function SelectionSort() {
     return (
