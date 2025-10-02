@@ -42,9 +42,27 @@ else:
                     <div className="card">
                         <h2>Complexity</h2>
                         <ul>
-                            <li>Best: O(n log n)</li>
-                            <li>Average: O(n log n)</li>
-                            <li>Worst: O(n log n)</li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n log n) means near-linear growth — it scales efficiently, often seen in fast sorting algorithms like Merge Sort and Quick Sort.">
+                                Best: O(n log n)
+                            </span>
+                            </li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n log n) means near-linear growth — it scales efficiently, often seen in fast sorting algorithms like Merge Sort and Quick Sort.">
+                                Average: O(n log n)
+                            </span>
+                            </li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n log n) means near-linear growth — it scales efficiently, often seen in fast sorting algorithms like Merge Sort and Quick Sort.">
+                                Worst: O(n log n)
+                            </span>
+                            </li>
                         </ul>
                     </div>
                 </div>

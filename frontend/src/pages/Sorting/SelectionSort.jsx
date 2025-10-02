@@ -40,9 +40,27 @@ export default function SelectionSort() {
                     <div className="card">
                         <h2>Complexity</h2>
                         <ul>
-                            <li>Best: O(n²)</li>
-                            <li>Average: O(n²)</li>
-                            <li>Worst: O(n²)</li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n²) means quadratic growth — the number of steps increases rapidly, making it much slower for large inputs.">
+                                Best: O(n²)
+                            </span>
+                            </li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n²) means quadratic growth — the number of steps increases rapidly, making it much slower for large inputs.">
+                                Average: O(n²)
+                            </span>
+                            </li>
+                            <li>
+                            <span 
+                                className="tooltip" 
+                                data-tooltip="O(n²) in the worst case means every item must be compared and swapped: very inefficient for large lists.">
+                                Worst: O(n²)
+                            </span>
+                            </li>
                         </ul>
                     </div>
                 </div>
