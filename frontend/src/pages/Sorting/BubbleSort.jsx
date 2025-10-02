@@ -48,7 +48,7 @@ export default function BubbleSort() {
             </div>
             <div className="relatedAlgorithms">
                 <h2>More Sorting Algorithms</h2>
-                <div className="card-grid" style={{ gap: "16px"}}>
+                <div className="card-grid" style={{ gap: "120px"}}>
                     <AlgorithmCard
                         title="Insertion Sort"
                         description="Goes through the list one item at a time, shifting the current item backwards if the previous one is larger, and so on until it’s in the right spot."

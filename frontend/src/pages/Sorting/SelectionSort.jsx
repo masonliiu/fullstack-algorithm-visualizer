@@ -49,7 +49,7 @@ export default function SelectionSort() {
             </div>
             <div className="relatedAlgorithms">
                 <h2>More Sorting Algorithms</h2>
-                <div className="card-grid" style={{ gap: "16px"}}>
+                <div className="card-grid" style={{ gap: "120px"}}>
                         <AlgorithmCard
                             title="Bubble Sort"
                             description="Repeatedly compares adjacent elements based on value, swapping them until the largest items “bubble up” to the end of the list."
