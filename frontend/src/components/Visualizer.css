@@ -103,7 +103,6 @@ html, body, #root {
     background: #8b95b3;
     border-radius: 4px 4px 0 0;
     transition: height 0.3s ease, background 0.15s ease;
-    border: 1px solid rgba(255,255,255,0.4);
 }
 
 .bar-label {
