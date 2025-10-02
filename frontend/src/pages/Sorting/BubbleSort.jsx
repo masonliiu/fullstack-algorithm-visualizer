@@ -17,10 +17,9 @@ export default function BubbleSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-{`for each item i in the list:
-    for each item j from start to length - i - 1:
-        if the item at j is greater than the item at j+1:
-            swap the two items`}
+                    {`for each item i in the list:
+                            if item[i] is greater than item[i+1]:
+                                swap item[i] and item[i+1]`}
                     </pre>
                 </div>
 
