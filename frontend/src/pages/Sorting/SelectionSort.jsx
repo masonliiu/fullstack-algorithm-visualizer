@@ -47,7 +47,6 @@ export default function SelectionSort() {
                     </div>
                 </div>
             </div>
-            <Visualizer algo="selection" />
             <div className="relatedAlgorithms">
                 <h2>More Sorting Algorithms</h2>
                 <div className="card-grid" style={{ gap: "16px"}}>
