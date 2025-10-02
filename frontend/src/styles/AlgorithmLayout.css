@@ -45,42 +45,37 @@
     padding: 8px 0;
   }
 
-  .keyword {
-    color: #4da6ff;
-    font-weight: bold;
-  }
-
-  .condition {
-    color: #facc15;
-  }
-
-  .action {
-    color: #22c55e;
-    font-style: italic;
-  }
-
   .tooltip {
     position: relative;
     cursor: help;
-    border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+  }
+
+  .tooltip:hover {
+    color: #4da6ff;
   }
 
   .tooltip:hover::after {
     content: attr(data-tooltip);
     position: absolute;
-    left: 0;
-    bottom: 125%;
-    background: rgba(0, 0, 0, 0.85);
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 6px;
+    left: 0%;
+    bottom: 140%;
+    background: rgba(71, 77, 86, 0.95);
+    color: #e5e7eb;
+    padding: 10px 14px;
+    border-radius: 12px;
     font-size: 0.8rem;
     width: max-content;
-    max-width: 220px;
+    max-width: 215px;
     white-space: normal;
     z-index: 1000;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), inset 0 0 12px rgba(77, 166, 255, 0.25);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeIn2 0.15s ease forwards;
   }
+  
   .use-cases-card {
     grid-column: 1;
   }
@@ -111,6 +106,11 @@
     height: auto;
     max-width: 100%;
     object-fit: contain;
+  }
+
+  @keyframes fadeIn2 {
+    from { opacity: 0; transform: translate(0, -10px); }
+    to { opacity: 1; transform: translate(0, 0); }
   }
 
   @media (max-width: 1100px) {

@@ -17,9 +17,9 @@ export default function BubbleSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-                        <span className="keyword">for each item i in the list:</span>{"\n"}
-                        <span className="condition">&nbsp;&nbsp;if item[i] is greater than item[i+1]:</span>{"\n"}
-                        <span className="action">&nbsp;&nbsp;&nbsp;&nbsp;swap item[i] and item[i+1]</span>
+                        <span>for each item i in the list:</span>{"\n\n"}
+                        <span>&nbsp;&nbsp;if item[i] is greater than item[i+1]:</span>{"\n\n"}
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;swap item[i] and item[i+1]</span>
                     </pre>
                 </div>
 
