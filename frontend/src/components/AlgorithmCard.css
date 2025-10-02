@@ -2,13 +2,12 @@
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
     padding: 20px;
     border-radius: 16px;
     color: white;
     max-width: 280px;
     max-height: 150px;
-    box-shadow: 0 0 10px rgba(217, 225, 235, 0.5);
+    box-shadow: 0 0 6px rgba(217, 225, 235, 0.5);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     cursor: pointer;
     display: flex;
