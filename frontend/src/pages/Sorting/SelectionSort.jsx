@@ -17,9 +17,13 @@ export default function SelectionSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-                    {`for each position i in the list:
-    find the smallest item in the unsorted part
-    swap the smallest item with the item at position i`}
+                    {`for each position i in the list:\n
+    find the smallest 
+    item in the unsorted 
+    part\n
+    swap the smallest 
+    item with the item 
+    at position i`}
                     </pre>
                 </div>
 
@@ -31,9 +35,8 @@ export default function SelectionSort() {
                     <div className="card use-cases-card">
                         <h2>Use Cases</h2>
                         <p>
-                        Selection sort is commonly used to introduce sorting algorithms because it is easy to understand. 
+                        Mainly used to introduce sorting algorithms.
                         It works well for very small datasets and is helpful when minimizing the number of swaps is more important than minimizing comparisons.
-
                         </p>
                     </div>
 

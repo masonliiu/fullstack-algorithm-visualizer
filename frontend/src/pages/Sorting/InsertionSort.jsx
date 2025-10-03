@@ -17,13 +17,17 @@ export default function InsertionSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-                    {`for each item i from the second item to the end of the list:
-                    set current = item at i
-                    set j = i - 1
-                    while j >= 0 and item[j] > current:
-                        shift item[j] one position to the right
-                        j = j - 1
-                    place current at position j + 1`}
+                    {`for each item i from the second item to the end of the list:\n
+    set current = i
+    set j = i - 1\n
+    while j >= 0 and 
+    item[j] > current:\n
+        shift item[j] 
+        one position 
+        to the right\n
+    j = j - 1\n
+    place current at 
+    position j + 1`}
                     </pre>
                 </div>
 
@@ -35,8 +39,8 @@ export default function InsertionSort() {
                     <div className="card use-cases-card">
                         <h2>Use Cases</h2>
                         <p>
-                        Insertion sort is useful when dealing with small datasets or lists that are already mostly sorted. 
-                        It is simple to implement and mainly used for teaching sorting fundamentals.
+                        Useful when dealing with small datasets or lists that are already mostly sorted. 
+                        It is straightforward to implement and not very common in production. 
                         </p>
                     </div>
 

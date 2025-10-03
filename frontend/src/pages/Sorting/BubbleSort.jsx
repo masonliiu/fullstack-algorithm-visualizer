@@ -17,9 +17,12 @@ export default function BubbleSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-                        <span>for each item i in the list:</span>{"\n\n"}
-                        <span>&nbsp;&nbsp;if item[i] is greater than item[i+1]:</span>{"\n\n"}
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;swap item[i] and item[i+1]</span>
+                        {`for each item i in the list:\n
+    if item[i] is 
+    greater than 
+    item[i+1]:\n
+        swap item[i] and 
+        item[i+1]`}
                     </pre>
                 </div>
 
@@ -31,8 +34,8 @@ export default function BubbleSort() {
                     <div className="card use-cases-card">
                         <h2>Use Cases</h2>
                         <p>
-                            Bubble sort is typically used for teaching purposes.
-                            It is rarely used in production, but good for understanding sorting basics.
+                            Typically used strictly for teaching purposes.
+                            It is rarely used in production, but good for understanding sorting fundamentals.
                         </p>
                     </div>
 

@@ -17,25 +17,27 @@ export default function MergeSort() {
                 <div className="card pseudocode-card">
                     <h2>Pseudocode</h2>
                     <pre>
-                    {`if the list has 1 or fewer items:
-    it is already sorted
-else:
-    split the list into two halves
-    recursively sort each half
-    merge the two sorted halves into one list`}
+                    {`if the list has 1 or fewer items:\n
+    mark as already 
+    sorted\n
+else:\n 
+    split the list into 
+    two halves\n
+    recursively sort
+    each half\n
+    merge the two sorted 
+    halves into one list`}
                     </pre>
                 </div>
-
                 <div className="visualizer-wrapper">
                     <Visualizer algo="merge" />
                 </div>
-
                 <div className="card-stack">
                     <div className="card use-cases-card">
                         <h2>Use Cases</h2>
                         <p>
-                        Merge sort is often used in practice for large datasets because of its predictable efficiency. 
-                        It forms the basis of many real-world sorting libraries and is especially effective for linked lists and data too large to fit into memory at once.
+                        Merge sort is often used for large datasets because of its consistent efficiency. 
+                        It is the basis of many real-world sorting libraries and is especially effective for linked lists and data that's too large to fit into memory at once.
                         </p>
                     </div>
 
