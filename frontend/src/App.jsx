@@ -5,6 +5,8 @@ import BubbleSort from "./pages/Sorting/BubbleSort";
 import InsertionSort from "./pages/Sorting/InsertionSort";
 import SelectionSort from "./pages/Sorting/SelectionSort";
 import MergeSort from "./pages/Sorting/MergeSort";
+import QuickSort from "./pages/Sorting/QuickSort";
+import HeapSort from "./pages/Sorting/HeapSort";
 import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
                 <Route path="/sorting/insertion" element={<InsertionSort />} />
                 <Route path="/sorting/selection" element={<SelectionSort />} />
                 <Route path="/sorting/merge" element={<MergeSort />} />
+                <Route path="/sorting/quick" element={<QuickSort />} />
+                <Route path="/sorting/heap" element={<HeapSort />} />
             </Routes>
         </Layout>
     );
