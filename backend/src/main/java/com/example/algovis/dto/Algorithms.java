@@ -579,8 +579,6 @@ public class Algorithms {
         return steps;
     }
 
-}
-
     // astar
     private static List<Step> astar(int start, int goal, Map<Integer, List<int[]>> graph, int n) {
         List<Step> steps = new ArrayList<>();
@@ -616,3 +614,4 @@ public class Algorithms {
         }
         return steps;
     }
+}
