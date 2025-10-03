@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchSort } from "../api";
-import { useParams } from "react-router-dom";
 import "./Visualizer.css";
 const HL_COLORS = {
   compare: "#facc15",
@@ -97,11 +96,84 @@ function renderSearch({ displayArray, highlightIndices, targetIndex }) {
 }
 
 function renderGraph({ frame }) {
-  //placeholder fallback
+  const nodes = frame?.nodes || [];
+  const edges = frame?.edges || [];
+  const width = 400;
+  const height = 400;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = Math.min(width, height) / 2 - 40;
+  const nodeCount = nodes.length;
+
+  if (!nodes.length) {
+    return (
+      <div style={{width: 400, height: 400, display: "flex", alignItems: "center", justifyContent: "center", background: "#f9fafb", border: "1px solid #cbd5e1", color: "#6b7280"}}>
+        Graph visualization placeholder
+      </div>
+    );
+  }
+
+  // Calculate positions of nodes in a circle layout
+  const nodePositions = nodes.map((node, index) => {
+    const angle = (2 * Math.PI * index) / nodeCount - Math.PI / 2;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    return { x, y };
+  });
+
+  const visitedSet = new Set(frame.visited || []);
+  const finalSet = new Set(frame.finalized || []);
+
   return (
-    <div style={{ width: "100%", height: 320, display: "flex", alignItems: "center", justifyContent: "center", color: "#8b95b3" }}>
-      <span>Graph visualization placeholder</span>
-    </div>
+    <svg width={width} height={height} style={{ background: "#f9fafb", border: "1px solid #cbd5e1" }}>
+      {edges.map((edge, idx) => {
+        const fromIndex = nodes.findIndex(n => n === edge[0]);
+        const toIndex = nodes.findIndex(n => n === edge[1]);
+        if (fromIndex === -1 || toIndex === -1) return null;
+        const fromPos = nodePositions[fromIndex];
+        const toPos = nodePositions[toIndex];
+        return (
+          <line
+            key={idx}
+            x1={fromPos.x}
+            y1={fromPos.y}
+            x2={toPos.x}
+            y2={toPos.y}
+            stroke="#9ca3af"
+            strokeWidth={2}
+          />
+        );
+      })}
+      {nodes.map((node, idx) => {
+        const pos = nodePositions[idx];
+        const isFinal = finalSet.has(node);
+        const isVisited = visitedSet.has(node);
+        const fillColor = isFinal ? HL_COLORS.mark_final : isVisited ? HL_COLORS.compare : "#8b95b3";
+        return (
+          <g key={idx}>
+            <circle
+              cx={pos.x}
+              cy={pos.y}
+              r={20}
+              fill={fillColor}
+              stroke="#374151"
+              strokeWidth={2}
+            />
+            <text
+              x={pos.x}
+              y={pos.y + 6}
+              textAnchor="middle"
+              fontSize="14"
+              fill="#f9fafb"
+              fontWeight="bold"
+              style={{ userSelect: "none" }}
+            >
+              {node}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 
@@ -220,6 +292,7 @@ export default function Visualizer({ algo }) {
     const data = await fetchSort({ algorithm: algo, size });
   
     const steps = Array.isArray(data.steps) ? data.steps : [];
+    console.log("Visualizer: received frames", { algo, size, stepsCount: steps.length, first: steps[0] });
     setFrames(steps);
   
     if (steps.length > 0) {
@@ -336,11 +409,15 @@ export default function Visualizer({ algo }) {
               highlightIndices: current.indices,
               targetIndex: current.targetIndex
             })
-          ) : (
-            (["dijkstra", "astar", "bfs"].some(a => algo.toLowerCase().includes(a))) ? (
+          ) : (            
+            ["bfs", "dfs", "astar", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
               renderPathfinding({ frame: current })
-            ) : (
-              renderGraph({ frame: current })
+            ) : (        
+              ["prim", "kruskal", "floydwarshall", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
+                renderGraph({ frame: current })
+              ) : (
+                renderGraph({ frame: current })
+              )
             )
           )
         }

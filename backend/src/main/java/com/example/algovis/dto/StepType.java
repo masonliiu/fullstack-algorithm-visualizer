@@ -7,5 +7,8 @@ public enum StepType {
 
     MARK_FINAL,
 
-    ARRAY_SNAPSHOT
+    ARRAY_SNAPSHOT,
+
+    GRAPH_SNAPSHOT,
+    GRID_SNAPSHOT
 }

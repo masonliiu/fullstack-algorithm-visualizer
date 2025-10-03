@@ -1,10 +1,19 @@
 package com.example.algovis.dto;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Step {
     private StepType type;
     private int[] indices;
     private int[] array;
+
+    private List<Integer> nodes;
+    private List<int[]> edges;
+    private List<Integer> visited;
+    private List<Integer> finalized;
+
+    private String[][] grid;
 
     public Step() {}
 
@@ -25,19 +34,31 @@ public class Step {
     }
     public static Step snapshot(int[] array) {
         return new Step(StepType.ARRAY_SNAPSHOT, null, array.clone());
-    }   
-
-    private static int[] copy(int[] a) {
-        return Arrays.copyOf(a, a.length); 
+    } 
+    
+    public static Step graph(List<Integer> nodes, List<int[]> edges, List<Integer> visited, List<Integer> finalized) {
+        Step step = new Step();
+        step.type = StepType.GRAPH_SNAPSHOT;
+        step.nodes = new ArrayList<>(nodes);
+        step.edges = new ArrayList<>(edges);
+        step.visited = new ArrayList<>(visited);
+        step.finalized = new ArrayList<>(finalized);
+        return step;
     }
 
-    public StepType getType() {
-        return type;
+    public static Step grid(String[][] grid) {
+        Step step = new Step();
+        step.type = StepType.GRID_SNAPSHOT;
+        step.grid = grid;
+        return step;
     }
-    public int[] getIndices() {
-        return indices;
-    }
-    public int[] getArray() {
-        return array;
-    }
+
+    public StepType getType() { return type; }
+    public int[] getIndices() { return indices; }
+    public int[] getArray() { return array; }
+    public List<Integer> getNodes() { return nodes; }
+    public List<int[]> getEdges() { return edges; }
+    public List<Integer> getVisited() { return visited; }
+    public List<Integer> getFinalized() { return finalized; }
+    public String[][] getGrid() { return grid; }
 }
