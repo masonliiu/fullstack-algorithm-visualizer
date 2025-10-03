@@ -13,6 +13,109 @@ const LEGEND = [
   { type: "mark_final", color: HL_COLORS.mark_final, desc: "Final position" }
 ];
 
+function renderSorting({
+  displayArray,
+  highlightType,
+  highlightIndices,
+  finalized,
+  barWidth,
+  maxValue,
+  HL_COLORS
+}) {
+  const gap = 4;
+  return displayArray.map((v, i) => {
+    const isHL = highlightIndices?.includes?.(i);
+    let bg = isHL ? HL_COLORS[highlightType] || undefined : undefined;
+    if (finalized.includes(i)) {
+      bg = HL_COLORS.mark_final;
+    }
+    return (
+      <div className="bar-container" key={i}
+        style={{ 
+          display: "flex", 
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-end"
+        }}
+      >
+        <div
+          className="bar"
+          style={{
+            width: `${barWidth}px`,
+            height: `${(v / maxValue) * 320}px`,
+            background: bg || "#8b95b3",
+          }}
+        />
+        <span className="bar-label"
+        style={{ fontSize: `${Math.min(14, Math.max(8, barWidth * 0.6))}px` }}
+        >
+          {v}
+        </span>
+      </div>
+    );
+  });
+}
+
+function renderSearch({ displayArray, highlightIndices, targetIndex }) {
+  return displayArray.map((v, i) => {
+    let bg = undefined;
+    if (i === targetIndex) {
+      bg = "#22c55e"; 
+    } else if (highlightIndices?.includes?.(i)) {
+      bg = "#facc15";
+    }
+    return (
+      <div className="bar-container" key={i}
+        style={{ 
+          display: "flex", 
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-end"
+        }}
+      >
+        <div
+          className="bar"
+          style={{
+            width: "18px",
+            height: `${(v / Math.max(...displayArray, 1)) * 320}px`,
+            background: bg || "#8b95b3",
+          }}
+        />
+        <span className="bar-label"
+        style={{ fontSize: "10px" }}
+        >
+          {v}
+        </span>
+      </div>
+    );
+  });
+}
+
+function renderGraph({ frame }) {
+  //placeholder fallback
+  return (
+    <div style={{ width: "100%", height: 320, display: "flex", alignItems: "center", justifyContent: "center", color: "#8b95b3" }}>
+      <span>Graph visualization placeholder</span>
+    </div>
+  );
+}
+
+function renderGrid({ frame }) {
+  const grid = frame?.grid || [[]];
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${grid[0]?.length || 1}, 20px)`, gap: "2px" }}>
+      {grid.flat().map((cell, idx) => (
+        <div key={idx} style={{
+          width: 20,
+          height: 20,
+          background: cell === 1 ? "#8b95b3" : "#e5e7eb",
+          border: "1px solid #cbd5e1"
+        }} />
+      ))}
+    </div>
+  );
+}
+
 
 export default function Visualizer({ algo }) {
   const [algorithm, setAlgorithm] = useState(algo || "bubble");
@@ -55,7 +158,6 @@ export default function Visualizer({ algo }) {
     });
     observer.observe(containerRef.current);
 
-    //initial width
     setContainerWidth(containerRef.current.getBoundingClientRect().width);
     return () => {
       observer.disconnect();
@@ -74,7 +176,6 @@ export default function Visualizer({ algo }) {
     const steps = Array.isArray(data.steps) ? data.steps : [];
     setFrames(steps);
   
-    //display snapshot
     if (steps.length > 0) {
       setIndex(0);
     }
@@ -133,6 +234,8 @@ export default function Visualizer({ algo }) {
     setAlgorithm(algo || "bubble"); 
   }, [algo]);
 
+  const sortingAlgos = ["bubble", "insertion", "selection", "merge", "quick", "heap"];
+
   return (
     <div className="visualizer-body">
     <div className="visualizer-app">
@@ -174,37 +277,31 @@ export default function Visualizer({ algo }) {
     </div>
 
       <div className="bars-wrap" ref={containerRef}>
-        {displayArray.map((v, i) => {
-          const isHL = highlightIndices?.includes?.(i);
-          let bg = isHL ? HL_COLORS[highlightType] || undefined : undefined;
-          if (finalized.includes(i)) {
-            bg = HL_COLORS.mark_final;
-          }
-          return (
-            <div className="bar-container" key={i}
-              style={{ 
-                display: "flex", 
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "flex-end"
-              }}
-            >
-              <div
-                className="bar"
-                style={{
-                  width: `${barWidth}px`,
-                  height: `${(v / maxValue) * 320}px`,
-                  background: bg || "#8b95b3",
-                }}
-              />
-              <span className="bar-label"
-              style={{ fontSize: `${Math.min(14, Math.max(8, barWidth * 0.6))}px` }}
-              >
-                {v}
-              </span>
-            </div>
-          );
-        })}
+        {
+          sortingAlgos.some(a => algorithm.toLowerCase().includes(a)) ? (
+            renderSorting({
+              displayArray,
+              highlightType,
+              highlightIndices,
+              finalized,
+              barWidth,
+              maxValue,
+              HL_COLORS
+            })
+          ) : algorithm.toLowerCase().includes("search") ? (
+            renderSearch({
+              displayArray,
+              highlightIndices: current.indices,
+              targetIndex: current.targetIndex
+            })
+          ) : (
+            (["dijkstra", "astar", "bfs"].some(a => algorithm.toLowerCase().includes(a))) ? (
+              renderGrid({ frame: current })
+            ) : (
+              renderGraph({ frame: current })
+            )
+          )
+        }
       </div>
 
       <div className="legend">
