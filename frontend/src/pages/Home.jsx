@@ -81,9 +81,21 @@ export default function Home() {
                     />
                     <AlgorithmCard
                         title="Merge Sort"
-                        description="Looks through the array to find the smallest value, then swaps it into the first position. Then it finds the next smallest and swaps it into the second position, and so on until sorted."
+                        description="Divides the array into halves, sorts each half, and then merges the sorted halves back together."
                         difficulty="Medium"
                         linkTo="sorting/merge"
+                    />
+                    <AlgorithmCard
+                        title="Quick Sort"
+                        description="Selects a pivot element and partitions the array around the pivot, recursively sorting the partitions."
+                        difficulty="Medium"
+                        linkTo="sorting/quick"
+                    />
+                    <AlgorithmCard
+                        title="Heap Sort"
+                        description="Builds a heap from the array and repeatedly extracts the maximum element to sort the array."
+                        difficulty="Medium"
+                        linkTo="sorting/heap"
                     />
                 </div>
             </div>
@@ -124,6 +136,12 @@ export default function Home() {
                         description="Computes shortest paths between all pairs of vertices in a weighted graph."
                         difficulty="Hard"
                         linkTo="graph/floydwarshall"
+                    />
+                    <AlgorithmCard
+                        title="Prim's Algorithm"
+                        description="Finds a minimum spanning tree by growing the spanning tree one edge at a time, choosing the smallest edge that connects the tree to a new vertex."
+                        difficulty="Medium"
+                        linkTo="graph/prim"
                     />
                 </div>
             </div>
