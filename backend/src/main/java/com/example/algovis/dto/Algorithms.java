@@ -288,6 +288,7 @@ public class Algorithms {
         int i = low - 1;
         for (int j = low; j < high; j++) {
             steps.add(Step.compare(j, high, arr));
+            steps.add(Step.snapshot(arr));
             if (arr[j] < pivot) {
                 i++;
                 steps.add(Step.swap(i, j, arr));
