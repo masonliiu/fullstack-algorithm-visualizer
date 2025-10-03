@@ -4,10 +4,6 @@ import com.example.algovis.dto.Step;
 import com.example.algovis.dto.SortResponse;
 
 import java.util.*;
-import java.util.Map;
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.Stack;
 
 public class Algorithms {
     public static SortResponse sort(String algo, int size, Long seed) {
@@ -515,17 +511,33 @@ public class Algorithms {
         List<Step> steps = new ArrayList<>();
         Arrays.sort(edges, Comparator.comparingInt(a -> a[2]));
         UnionFind uf = new UnionFind(n);
+        List<int[]> mstEdges = new ArrayList<>();
+
+        // Build nodes list for Step.graph
+        List<Integer> nodes = new ArrayList<>();
+        for (int i = 0; i < n; i++) nodes.add(i);
 
         for (int[] edge : edges) {
             int u = edge[0], v = edge[1], w = edge[2];
-            steps.add(Step.compare(u, v, new int[]{w}));
+            List<int[]> consideredEdge = new ArrayList<>();
+            consideredEdge.add(new int[]{u, v, w});
+        
+            steps.add(Step.graph(nodes, consideredEdge, Arrays.asList(u, v), new ArrayList<>()));
+        
             if (uf.find(u) != uf.find(v)) {
                 uf.union(u, v);
-                steps.add(Step.swap(u, v, new int[]{w})); 
-                steps.add(Step.markFinal(u, new int[n]));
-                steps.add(Step.markFinal(v, new int[n]));
+                mstEdges.add(new int[]{u, v, w});
+        
+                List<Integer> finalizedNodes = new ArrayList<>();
+                finalizedNodes.add(u);
+                finalizedNodes.add(v);
+        
+                steps.add(Step.graph(nodes, new ArrayList<>(mstEdges), Arrays.asList(u, v), finalizedNodes));
             }
         }
+        
+        // Push final MST snapshot
+        steps.add(Step.graph(nodes, new ArrayList<>(mstEdges), new ArrayList<>(), nodes));
         return steps;
     }
 
