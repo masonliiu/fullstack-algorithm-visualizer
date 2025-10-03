@@ -87,6 +87,69 @@ export default function Home() {
                     />
                 </div>
             </div>
+            <div className="searching-section hidden">
+                <h2 className="home-title">Searching</h2>
+                <div className="card-grid">
+                    <AlgorithmCard
+                        title="Linear Search"
+                        description="Checks each element in the list sequentially until the target value is found or the list ends."
+                        difficulty="Easy"
+                        linkTo="searching/linear"
+                    />
+                    <AlgorithmCard
+                        title="Binary Search"
+                        description="Efficiently searches a sorted list by repeatedly dividing the search interval in half."
+                        difficulty="Easy"
+                        linkTo="searching/binary"
+                    />
+                </div>
+            </div>
+            <div className="graph-section hidden">
+                <h2 className="home-title">Graph Algorithms</h2>
+                <div className="card-grid">
+                    <AlgorithmCard
+                        title="Dijkstra's Algorithm"
+                        description="Finds the shortest path between nodes in a graph, which may represent road networks."
+                        difficulty="Medium"
+                        linkTo="graph/dijkstra"
+                    />
+                    <AlgorithmCard
+                        title="Kruskal's Algorithm"
+                        description="Finds a minimum spanning tree for a connected weighted graph by adding edges in increasing order of weight."
+                        difficulty="Medium"
+                        linkTo="graph/kruskal"
+                    />
+                    <AlgorithmCard
+                        title="Floyd-Warshall"
+                        description="Computes shortest paths between all pairs of vertices in a weighted graph."
+                        difficulty="Hard"
+                        linkTo="graph/floydwarshall"
+                    />
+                </div>
+            </div>
+            <div className="pathfinding-section hidden">
+                <h2 className="home-title">Pathfinding</h2>
+                <div className="card-grid">
+                    <AlgorithmCard
+                        title="BFS"
+                        description="Explores nodes level by level, useful for finding the shortest path in unweighted graphs."
+                        difficulty="Easy"
+                        linkTo="pathfinding/bfs"
+                    />
+                    <AlgorithmCard
+                        title="DFS"
+                        description="Explores as far as possible along each branch before backtracking."
+                        difficulty="Easy"
+                        linkTo="pathfinding/dfs"
+                    />
+                    <AlgorithmCard
+                        title="A* Search"
+                        description="Uses heuristics to efficiently find the shortest path between nodes."
+                        difficulty="Medium"
+                        linkTo="pathfinding/astar"
+                    />
+                </div>
+            </div>
         </div>
     );
 }
