@@ -47,6 +47,18 @@ public class Algorithms {
             case "bfs":
                 steps = bfs(0, demoGraph(), arr.length);
                 break;
+            case "dijkstra":
+                steps = dijkstra(0, demoWeightedGraph(), arr.length);
+                break;
+            case "prim":
+                steps = prim(arr.length, demoWeightedAdjMatrix(arr.length));
+                break;
+            case "kruskal":
+                steps = kruskal(arr.length, demoWeightedEdges(arr.length));
+                break;
+            case "floydwarshall":
+                steps = floydWarshall(demoWeightedAdjMatrix(arr.length), arr.length);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown algorithm: " + algo);
         }
@@ -379,6 +391,188 @@ public class Algorithms {
         graph.put(3, Arrays.asList(4));
         graph.put(4, new ArrayList<>());
         return graph;
+    }
+
+    // demo weighted graph
+    private static Map<Integer, List<int[]>> demoWeightedGraph() {
+        Map<Integer, List<int[]>> graph = new HashMap<>();
+        graph.put(0, Arrays.asList(new int[]{1, 2}, new int[]{3, 6}));
+        graph.put(1, Arrays.asList(new int[]{0, 2}, new int[]{2, 3}, new int[]{3, 8}, new int[]{4, 5}));
+        graph.put(2, Arrays.asList(new int[]{1, 3}, new int[]{4, 7}));
+        graph.put(3, Arrays.asList(new int[]{0, 6}, new int[]{1, 8}));
+        graph.put(4, Arrays.asList(new int[]{1, 5}, new int[]{2, 7}));
+        return graph;
+    }
+
+    private static int[][] demoWeightedAdjMatrix(int n) {
+        int INF = 1000000;
+        int[][] graph = new int[n][n];
+        for (int i = 0; i < n; i++) Arrays.fill(graph[i], INF);
+        for (int i = 0; i < n; i++) graph[i][i] = 0;
+        // hardcoded for 5 nodes
+        if (n >= 5) {
+            graph[0][1] = 2; graph[1][0] = 2;
+            graph[0][3] = 6; graph[3][0] = 6;
+            graph[1][2] = 3; graph[2][1] = 3;
+            graph[1][3] = 8; graph[3][1] = 8;
+            graph[1][4] = 5; graph[4][1] = 5;
+            graph[2][4] = 7; graph[4][2] = 7;
+        }
+        return graph;
+    }
+
+    private static int[][] demoWeightedEdges(int n) {
+        return new int[][] {
+            {0, 1, 2}, {0, 3, 6}, {1, 2, 3}, {1, 3, 8}, {1, 4, 5}, {2, 4, 7}
+        };
+    }
+
+    // dijkstra
+    private static List<Step> dijkstra(int start, Map<Integer, List<int[]>> graph, int n) {
+        List<Step> steps = new ArrayList<>();
+        int INF = Integer.MAX_VALUE;
+        int[] dist = new int[n];
+        boolean[] visited = new boolean[n];
+        Arrays.fill(dist, INF);
+        dist[start] = 0;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.offer(new int[]{start, 0});
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int u = curr[0];
+            if (visited[u]) continue;
+            visited[u] = true;
+            steps.add(Step.markFinal(u, dist));
+            for (int[] edge : graph.getOrDefault(u, Collections.emptyList())) {
+                int v = edge[0];
+                int weight = edge[1];
+                steps.add(Step.compare(u, v, dist));
+                if (!visited[v] && dist[u] != INF && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    steps.add(Step.swap(v, u, dist));
+                    pq.offer(new int[]{v, dist[v]});
+                }
+            }
+        }
+        return steps;
+    }
+
+    // prim
+    private static List<Step> prim(int n, int[][] graph) {
+        List<Step> steps = new ArrayList<>();
+        int INF = 1000000;
+        int[] key = new int[n];
+        int[] parent = new int[n];
+        boolean[] inMST = new boolean[n];
+
+        Arrays.fill(key, INF);
+        Arrays.fill(parent, -1);
+        key[0] = 0;
+
+        for (int count = 0; count < n - 1; count++) {
+            int u = minKey(key, inMST, n, steps);
+            inMST[u] = true;
+            steps.add(Step.markFinal(u, key));
+            for (int v = 0; v < n; v++) {
+                if (graph[u][v] != INF && !inMST[v]) {
+                    steps.add(Step.compare(u, v, key));
+                    if (graph[u][v] < key[v]) {
+                        key[v] = graph[u][v];
+                        parent[v] = u;
+                        steps.add(Step.swap(v, u, key));
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            steps.add(Step.markFinal(i, key));
+        }
+        return steps;
+    }
+
+    private static int minKey(int[] key, boolean[] inMST, int n, List<Step> steps) {
+        int min = Integer.MAX_VALUE, minIndex = -1;
+        for (int v = 0; v < n; v++) {
+            if (!inMST[v]) {
+                steps.add(Step.compare(minIndex == -1 ? 0 : minIndex, v, key));
+                if (key[v] < min) {
+                    min = key[v];
+                    minIndex = v;
+                }
+            }
+        }
+        return minIndex;
+    }
+
+    // kruskal
+    private static List<Step> kruskal(int n, int[][] edges) {
+        List<Step> steps = new ArrayList<>();
+        Arrays.sort(edges, Comparator.comparingInt(a -> a[2]));
+        UnionFind uf = new UnionFind(n);
+
+        for (int[] edge : edges) {
+            int u = edge[0], v = edge[1], w = edge[2];
+            steps.add(Step.compare(u, v, new int[]{w}));
+            if (uf.find(u) != uf.find(v)) {
+                uf.union(u, v);
+                steps.add(Step.swap(u, v, new int[]{w})); 
+                steps.add(Step.markFinal(u, new int[n]));
+                steps.add(Step.markFinal(v, new int[n]));
+            }
+        }
+        return steps;
+    }
+
+    private static class UnionFind {
+        int[] parent, rank;
+        UnionFind(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for (int i=0; i<n; i++) parent[i] = i;
+        }
+        int find(int x) {
+            if (parent[x] != x) parent[x] = find(parent[x]);
+            return parent[x];
+        }
+        void union(int x, int y) {
+            int rx = find(x), ry = find(y);
+            if (rx == ry) return;
+            if (rank[rx] < rank[ry]) parent[rx] = ry;
+            else if (rank[ry] < rank[rx]) parent[ry] = rx;
+            else {
+                parent[ry] = rx;
+                rank[rx]++;
+            }
+        }
+    }
+
+    // floyd-warshall
+    private static List<Step> floydWarshall(int[][] dist, int n) {
+        List<Step> steps = new ArrayList<>();
+        int INF = 1000000;
+        int[][] d = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            d[i] = Arrays.copyOf(dist[i], n);
+        }
+
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    steps.add(Step.compare(i, k, d[i]));
+                    steps.add(Step.compare(k, j, d[k]));
+                    if (d[i][k] != INF && d[k][j] != INF && d[i][k] + d[k][j] < d[i][j]) {
+                        d[i][j] = d[i][k] + d[k][j];
+                        steps.add(Step.swap(i, j, d[i]));
+                    }
+                }
+            }
+            for (int i = 0; i < n; i++) {
+                steps.add(Step.markFinal(i, d[i]));
+            }
+        }
+        return steps;
     }
 
 }
