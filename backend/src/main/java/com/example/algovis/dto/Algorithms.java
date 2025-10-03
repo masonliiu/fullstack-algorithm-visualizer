@@ -50,6 +50,9 @@ public class Algorithms {
             case "dijkstra":
                 steps = dijkstra(0, demoWeightedGraph(), arr.length);
                 break;
+            case "astar":
+                steps = astar(0, arr.length - 1, demoWeightedGraph(), arr.length);
+                break;
             case "prim":
                 steps = prim(arr.length, demoWeightedAdjMatrix(arr.length));
                 break;
@@ -577,3 +580,39 @@ public class Algorithms {
     }
 
 }
+
+    // astar
+    private static List<Step> astar(int start, int goal, Map<Integer, List<int[]>> graph, int n) {
+        List<Step> steps = new ArrayList<>();
+        int INF = Integer.MAX_VALUE;
+        int[] dist = new int[n];
+        boolean[] visited = new boolean[n];
+        Arrays.fill(dist, INF);
+        dist[start] = 0;
+
+        int[] heuristic = new int[n];
+        Arrays.fill(heuristic, 0);
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.offer(new int[]{start, dist[start] + heuristic[start]});
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int u = curr[0];
+            if (visited[u]) continue;
+            visited[u] = true;
+            steps.add(Step.markFinal(u, dist));
+            if (u == goal) break;
+            for (int[] edge : graph.getOrDefault(u, Collections.emptyList())) {
+                int v = edge[0];
+                int weight = edge[1];
+                steps.add(Step.compare(u, v, dist));
+                if (!visited[v] && dist[u] != INF && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    steps.add(Step.swap(v, u, dist));
+                    pq.offer(new int[]{v, dist[v] + heuristic[v]});
+                }
+            }
+        }
+        return steps;
+    }

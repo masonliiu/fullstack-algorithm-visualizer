@@ -5,7 +5,12 @@ import "./Visualizer.css";
 const HL_COLORS = {
   compare: "#facc15",
   swap: "#ef4444",
-  mark_final: "#22c55e"
+  mark_final: "#22c55e",
+  open: "#3b82f6",
+  closed: "#6366f1",
+  path: "#f97316",
+  start: "#10b981",
+  goal: "#ef4444"
 };
 const LEGEND = [
   { type: "compare", color: HL_COLORS.compare, desc: "Comparing values" },
@@ -112,6 +117,48 @@ function renderGrid({ frame }) {
           border: "1px solid #cbd5e1"
         }} />
       ))}
+    </div>
+  );
+}
+
+function renderPathfinding({ frame }) {
+  const grid = frame?.grid || [[]];
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${grid[0]?.length || 1}, 20px)`, gap: "2px" }}>
+      {grid.flat().map((cell, idx) => {
+        let bg = "#e5e7eb"; // default background
+        switch(cell) {
+          case "wall":
+          case 1:
+            bg = "#8b95b3";
+            break;
+          case "open":
+            bg = HL_COLORS.open;
+            break;
+          case "closed":
+            bg = HL_COLORS.closed;
+            break;
+          case "path":
+            bg = HL_COLORS.path;
+            break;
+          case "start":
+            bg = HL_COLORS.start;
+            break;
+          case "goal":
+            bg = HL_COLORS.goal;
+            break;
+          default:
+            bg = "#e5e7eb";
+        }
+        return (
+          <div key={idx} style={{
+            width: 20,
+            height: 20,
+            background: bg,
+            border: "1px solid #cbd5e1"
+          }} />
+        );
+      })}
     </div>
   );
 }
@@ -291,7 +338,7 @@ export default function Visualizer({ algo }) {
             })
           ) : (
             (["dijkstra", "astar", "bfs"].some(a => algo.toLowerCase().includes(a))) ? (
-              renderGrid({ frame: current })
+              renderPathfinding({ frame: current })
             ) : (
               renderGraph({ frame: current })
             )
