@@ -97,76 +97,85 @@ function renderSearch({ displayArray, highlightIndices, targetIndex }) {
 
 function renderGraph({ frame }) {
   const nodes = frame?.nodes || [];
-  const edges = frame?.edges || [];
-  const width = 400;
-  const height = 400;
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const radius = Math.min(width, height) / 2 - 40;
-  const nodeCount = nodes.length;
-
   if (!nodes.length) {
     return (
-      <div style={{width: 400, height: 400, display: "flex", alignItems: "center", justifyContent: "center", background: "#f9fafb", border: "1px solid #cbd5e1", color: "#6b7280"}}>
+      <div style={{width: 400, height: 400, display: "flex",
+                   alignItems: "center", justifyContent: "center",
+                   background: "#f9fafb", border: "1px solid #cbd5e1",
+                   color: "#6b7280"}}>
         Graph visualization placeholder
       </div>
     );
   }
 
-  // Calculate positions of nodes in a circle layout
-  const nodePositions = nodes.map((node, index) => {
-    const angle = (2 * Math.PI * index) / nodeCount - Math.PI / 2;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-    return { x, y };
+  const allEdges = frame?.edges || [];      // all edges for background
+  const mstEdges = frame?.mstEdges || [];   // accepted MST edges
+  const activeEdge = frame?.activeEdge || null; // currently considered
+
+  const width = 400, height = 400;
+  const cx = width / 2, cy = height / 2;
+  const radius = Math.min(width, height) / 2 - 40;
+
+  // circular node positions
+  const positions = nodes.map((node, i) => {
+    const angle = (2 * Math.PI * i) / nodes.length - Math.PI / 2;
+    return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
   });
 
-  const visitedSet = new Set(frame.visited || []);
+  const posOf = (n) => positions[nodes.findIndex(v => v === n)];
   const finalSet = new Set(frame.finalized || []);
+  const activeSet = new Set(activeEdge ? [activeEdge[0], activeEdge[1]] : []);
+
+  const edgeLine = (e, key, stroke, strokeWidth=2, dash=false) => {
+    const [u, v, w] = e;
+    const p1 = posOf(u), p2 = posOf(v);
+    if (!p1 || !p2) return null;
+    const midx = (p1.x + p2.x) / 2;
+    const midy = (p1.y + p2.y) / 2;
+    return (
+      <g key={key}>
+        <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
+              stroke={stroke} strokeWidth={strokeWidth}
+              strokeDasharray={dash ? "6 4" : "none"} />
+        {typeof w === "number" && (
+          <text x={midx} y={midy - 6} textAnchor="middle" fontSize="10" fill="#374151">
+            {w}
+          </text>
+        )}
+      </g>
+    );
+  };
 
   return (
     <svg width={width} height={height} style={{ background: "#f9fafb", border: "1px solid #cbd5e1" }}>
-      {edges.map((edge, idx) => {
-        const fromIndex = nodes.findIndex(n => n === edge[0]);
-        const toIndex = nodes.findIndex(n => n === edge[1]);
-        if (fromIndex === -1 || toIndex === -1) return null;
-        const fromPos = nodePositions[fromIndex];
-        const toPos = nodePositions[toIndex];
-        return (
-          <line
-            key={idx}
-            x1={fromPos.x}
-            y1={fromPos.y}
-            x2={toPos.x}
-            y2={toPos.y}
-            stroke="#9ca3af"
-            strokeWidth={2}
-          />
-        );
-      })}
+      {/* background edges (gray) */}
+      {allEdges.map((e, i) => edgeLine(e, `bg-${i}`, "#d1d5db", 2))}
+
+      {/* MST edges (green, thick) */}
+      {mstEdges.map((e, i) => edgeLine(e, `mst-${i}`, HL_COLORS.mark_final, 4))}
+
+      {/* active edge (yellow, dashed) */}
+      {activeEdge ? edgeLine(activeEdge, "active", HL_COLORS.compare, 4, true) : null}
+
+      {/* nodes */}
       {nodes.map((node, idx) => {
-        const pos = nodePositions[idx];
+        const p = positions[idx];
         const isFinal = finalSet.has(node);
-        const isVisited = visitedSet.has(node);
-        const fillColor = isFinal ? HL_COLORS.mark_final : isVisited ? HL_COLORS.compare : "#8b95b3";
+        const isActive = activeSet.has(node);
+        const fill = isFinal ? HL_COLORS.mark_final : isActive ? HL_COLORS.compare : "#8b95b3";
         return (
-          <g key={idx}>
-            <circle
-              cx={pos.x}
-              cy={pos.y}
-              r={20}
-              fill={fillColor}
-              stroke="#374151"
-              strokeWidth={2}
-            />
+          <g key={`n-${node}`}>
+            <circle cx={p.x} cy={p.y} r={20} fill={fill} stroke="#374151" strokeWidth={2} />
             <text
-              x={pos.x}
-              y={pos.y + 6}
+              x={p.x}
+              y={p.y + 4}
               textAnchor="middle"
-              fontSize="14"
+              fontSize="10"
               fill="#f9fafb"
               fontWeight="bold"
-              style={{ userSelect: "none" }}
+              stroke="#374151"
+              strokeWidth="0.5"
+              paintOrder="stroke"
             >
               {node}
             </text>
@@ -360,8 +369,8 @@ export default function Visualizer({ algo }) {
           Size: <span style={{display: "inline-block", minWidth: 35, textAlign: "right"}}>{size}</span>
           <input
             type="range"
-            min="5"
-            max="50"
+            min="2"
+            max={["prim","kruskal"].includes(algo.toLowerCase()) ? "10" : "50"}
             value={size}
             onChange={e => setSize(Number(e.target.value))}
           />

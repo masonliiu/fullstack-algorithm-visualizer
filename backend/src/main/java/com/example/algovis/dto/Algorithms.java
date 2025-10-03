@@ -11,31 +11,40 @@ public class Algorithms {
         int[] arr = Arrays.copyOf(initial, initial.length);
 
         List<Step> steps;
-        switch (algo == null ? "" : algo.toLowerCase()) {
+        String algoname = algo == null ? "" : algo.toLowerCase();
+        switch (algoname) {
             case "bubble":
                 steps = bubble(arr);
+                steps.add(Step.snapshot(arr));
                 break;
             case "insertion":
                 steps = insertion(arr);
+                steps.add(Step.snapshot(arr));
                 break;
             case "selection":
                 steps = selection(arr);
+                steps.add(Step.snapshot(arr));
                 break;
             case "merge":
                 steps = merge(arr);
+                steps.add(Step.snapshot(arr));
                 break;
             case "heap":
                 steps = heap(arr);
+                steps.add(Step.snapshot(arr));
                 break;
             case "quick":
                 steps = quick(arr);
+                steps.add(Step.snapshot(arr));
                 break;
             case "linearsearch":
                 steps = linearSearch(arr, 42);
+                steps.add(Step.snapshot(arr));
                 break;
             case "binarysearch":
                 Arrays.sort(arr);
                 steps = binarySearch(arr, 42);
+                steps.add(Step.snapshot(arr));
                 break;
             case "dfs":
                 steps = dfs(0, demoGraph(), arr.length);
@@ -61,7 +70,6 @@ public class Algorithms {
             default:
                 throw new IllegalArgumentException("Unknown algorithm: " + algo);
         }
-        steps.add(Step.snapshot(arr));
         return new SortResponse(cap(algo), initial, steps);
     }
 
@@ -421,11 +429,28 @@ public class Algorithms {
         return graph;
     }
 
-    private static int[][] demoWeightedEdges(int n) {
-        return new int[][] {
-            {0, 1, 2}, {0, 3, 6}, {1, 2, 3}, {1, 3, 8}, {1, 4, 5}, {2, 4, 7}
-        };
+private static int[][] demoWeightedEdges(int n) {
+    Random rand = new Random();
+    List<int[]> edges = new ArrayList<>();
+
+    // Ensure connectivity with a random spanning tree
+    for (int i = 1; i < n; i++) {
+        int parent = rand.nextInt(i); // connect new node to any previous node
+        int w = 1 + rand.nextInt(20);
+        edges.add(new int[]{i, parent, w});
     }
+
+    // Add extra random edges for density
+    int extra = n; // about n extra edges
+    for (int k = 0; k < extra; k++) {
+        int u = rand.nextInt(n), v = rand.nextInt(n);
+        if (u == v) continue;
+        int w = 1 + rand.nextInt(20);
+        edges.add(new int[]{u, v, w});
+    }
+
+    return edges.toArray(new int[0][]);
+}
 
     // dijkstra
     private static List<Step> dijkstra(int start, Map<Integer, List<int[]>> graph, int n) {
@@ -512,32 +537,44 @@ public class Algorithms {
         Arrays.sort(edges, Comparator.comparingInt(a -> a[2]));
         UnionFind uf = new UnionFind(n);
         List<int[]> mstEdges = new ArrayList<>();
-
-        // Build nodes list for Step.graph
         List<Integer> nodes = new ArrayList<>();
         for (int i = 0; i < n; i++) nodes.add(i);
 
+        List<int[]> allEdges = new ArrayList<>();
+        for (int[] e : edges) allEdges.add(Arrays.copyOf(e, 3));
+
+        Set<Integer> finalizedNodes = new HashSet<>();
+
         for (int[] edge : edges) {
             int u = edge[0], v = edge[1], w = edge[2];
-            List<int[]> consideredEdge = new ArrayList<>();
-            consideredEdge.add(new int[]{u, v, w});
-        
-            steps.add(Step.graph(nodes, consideredEdge, Arrays.asList(u, v), new ArrayList<>()));
-        
+            int[] currentEdge = new int[]{u, v, w};
+
+            // frame: considering this edge
+            steps.add(Step.graphMST(
+                nodes, allEdges, new ArrayList<>(mstEdges), currentEdge,
+                new ArrayList<>(), new ArrayList<>(finalizedNodes)
+            ));
+
             if (uf.find(u) != uf.find(v)) {
                 uf.union(u, v);
-                mstEdges.add(new int[]{u, v, w});
-        
-                List<Integer> finalizedNodes = new ArrayList<>();
+                mstEdges.add(currentEdge);
                 finalizedNodes.add(u);
                 finalizedNodes.add(v);
-        
-                steps.add(Step.graph(nodes, new ArrayList<>(mstEdges), Arrays.asList(u, v), finalizedNodes));
+
+                // frame: after accepting edge
+                steps.add(Step.graphMST(
+                    nodes, allEdges, new ArrayList<>(mstEdges), null,
+                    new ArrayList<>(), new ArrayList<>(finalizedNodes)
+                ));
             }
         }
-        
-        // Push final MST snapshot
-        steps.add(Step.graph(nodes, new ArrayList<>(mstEdges), new ArrayList<>(), nodes));
+
+        // final MST snapshot
+        steps.add(Step.graphMST(
+            nodes, allEdges, new ArrayList<>(mstEdges), null,
+            new ArrayList<>(), new ArrayList<>(finalizedNodes)
+        ));
+
         return steps;
     }
 
