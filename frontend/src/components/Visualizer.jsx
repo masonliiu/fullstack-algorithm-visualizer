@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchSort } from "../api";
 import "./Visualizer.css";
+
 const HL_COLORS = {
   compare: "#facc15",
   swap: "#ef4444",
@@ -11,6 +12,7 @@ const HL_COLORS = {
   start: "#10b981",
   goal: "#ef4444"
 };
+
 const LEGEND = [
   { type: "compare", color: HL_COLORS.compare, desc: "Comparing values" },
   { type: "swap", color: HL_COLORS.swap, desc: "Swapping values" },
@@ -26,7 +28,6 @@ function renderSorting({
   maxValue,
   HL_COLORS
 }) {
-  const gap = 4;
   return displayArray.map((v, i) => {
     const isHL = highlightIndices?.includes?.(i);
     let bg = isHL ? HL_COLORS[highlightType] || undefined : undefined;
@@ -35,12 +36,7 @@ function renderSorting({
     }
     return (
       <div className="bar-container" key={i}
-        style={{ 
-          display: "flex", 
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-end"
-        }}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}
       >
         <div
           className="bar"
@@ -51,7 +47,7 @@ function renderSorting({
           }}
         />
         <span className="bar-label"
-        style={{ fontSize: `${Math.min(14, Math.max(8, barWidth * 0.6))}px` }}
+          style={{ fontSize: `${Math.min(14, Math.max(8, barWidth * 0.6))}px` }}
         >
           {v}
         </span>
@@ -70,12 +66,7 @@ function renderSearch({ displayArray, highlightIndices, targetIndex }) {
     }
     return (
       <div className="bar-container" key={i}
-        style={{ 
-          display: "flex", 
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-end"
-        }}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}
       >
         <div
           className="bar"
@@ -85,9 +76,7 @@ function renderSearch({ displayArray, highlightIndices, targetIndex }) {
             background: bg || "#8b95b3",
           }}
         />
-        <span className="bar-label"
-        style={{ fontSize: "10px" }}
-        >
+        <span className="bar-label" style={{ fontSize: "10px" }}>
           {v}
         </span>
       </div>
@@ -95,63 +84,191 @@ function renderSearch({ displayArray, highlightIndices, targetIndex }) {
   });
 }
 
-function renderGraph({ frame }) {
+function forceLayout(nodes, edges, width, height, iter = 400) {
+  const n = nodes.length;
+  if (n === 0) return [];
+
+  // Initialize positions in a circle with small deterministic jitter
+  const positions = nodes.map((_, i) => {
+    const angle = (2 * Math.PI * i) / n;
+    const jitter = ((i * 37) % 10) - 5; // deterministic jitter from -5 to +4
+    return {
+      x: width / 2 + (width / 3) * Math.cos(angle) + jitter,
+      y: height / 2 + (height / 3) * Math.sin(angle) + jitter,
+      dx: 0,
+      dy: 0
+    };
+  });
+
+  // Ideal length between nodes
+  const area = width * height;
+  const k = Math.sqrt(area / n);
+
+  let temperature = width / 10;
+
+  // Helper to limit displacement by temperature
+  const limitDisplacement = (dx, dy, temp) => {
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist === 0) return { dx: 0, dy: 0 };
+    const limitedDist = Math.min(dist, temp);
+    return {
+      dx: (dx / dist) * limitedDist,
+      dy: (dy / dist) * limitedDist
+    };
+  };
+
+  // Minimum distance between nodes to avoid collisions (padding)
+  const minDist = 40;
+
+  for (let it = 0; it < iter; it++) {
+    // Reset forces
+    for (let i = 0; i < n; i++) {
+      positions[i].dx = 0;
+      positions[i].dy = 0;
+    }
+
+    // Calculate repulsive forces
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        let dx = positions[i].x - positions[j].x;
+        let dy = positions[i].y - positions[j].y;
+        let dist = Math.sqrt(dx * dx + dy * dy) || 0.01; // avoid div by zero
+        let force = (k * k) / dist;
+
+        // Apply repulsive force
+        let repulseX = (dx / dist) * force;
+        let repulseY = (dy / dist) * force;
+
+        positions[i].dx += repulseX;
+        positions[i].dy += repulseY;
+        positions[j].dx -= repulseX;
+        positions[j].dy -= repulseY;
+      }
+    }
+
+    // Calculate attractive forces (edges)
+    for (let edge of edges) {
+      const u = nodes.indexOf(edge[0]);
+      const v = nodes.indexOf(edge[1]);
+      if (u === -1 || v === -1) continue;
+
+      let dx = positions[u].x - positions[v].x;
+      let dy = positions[u].y - positions[v].y;
+      let dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
+      let force = (dist * dist) / k;
+
+      let attractX = (dx / dist) * force;
+      let attractY = (dy / dist) * force;
+
+      positions[u].dx -= attractX;
+      positions[u].dy -= attractY;
+      positions[v].dx += attractX;
+      positions[v].dy += attractY;
+    }
+
+    // Update positions with cooling and enforce boundaries
+    for (let i = 0; i < n; i++) {
+      let { dx, dy } = positions[i];
+      let limited = limitDisplacement(dx, dy, temperature);
+      positions[i].x += limited.dx;
+      positions[i].y += limited.dy;
+
+      // Keep inside boundaries with 40px margin
+      positions[i].x = Math.min(width - 40, Math.max(40, positions[i].x));
+      positions[i].y = Math.min(height - 40, Math.max(40, positions[i].y));
+    }
+
+    // Enforce minimum distance padding (collision avoidance)
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        let dx = positions[i].x - positions[j].x;
+        let dy = positions[i].y - positions[j].y;
+        let dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
+        if (dist < minDist) {
+          let overlap = (minDist - dist) / 2;
+          let offsetX = (dx / dist) * overlap;
+          let offsetY = (dy / dist) * overlap;
+          positions[i].x += offsetX;
+          positions[i].y += offsetY;
+          positions[j].x -= offsetX;
+          positions[j].y -= offsetY;
+
+          // Clamp positions inside boundaries after adjustment
+          positions[i].x = Math.min(width - 40, Math.max(40, positions[i].x));
+          positions[i].y = Math.min(height - 40, Math.max(40, positions[i].y));
+          positions[j].x = Math.min(width - 40, Math.max(40, positions[j].x));
+          positions[j].y = Math.min(height - 40, Math.max(40, positions[j].y));
+        }
+      }
+    }
+
+    // Cool temperature
+    temperature *= 0.95;
+  }
+
+  return positions.map(({ x, y }) => ({ x, y }));
+}
+
+function renderGraph({ frame, width = 300, height = 300 }) {
   const nodes = frame?.nodes || [];
   if (!nodes.length) {
     return (
-      <div style={{width: 400, height: 400, display: "flex",
-                   alignItems: "center", justifyContent: "center",
-                   background: "#f9fafb", border: "1px solid #cbd5e1",
-                   color: "#6b7280"}}>
+      <div style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#f9fafb",
+        border: "1px solid #cbd5e1",
+        color: "#6b7280"
+      }}>
         Graph visualization placeholder
       </div>
     );
   }
 
-  const allEdges = frame?.edges || [];      // all edges for background
-  const mstEdges = frame?.mstEdges || [];   // accepted MST edges
-  const activeEdge = frame?.activeEdge || null; // currently considered
+  const allEdges = frame?.edges || [];
+  const mstEdges = frame?.mstEdges || [];
+  const activeEdge = frame?.activeEdge || null;
 
-  const width = 400, height = 400;
-  const cx = width / 2, cy = height / 2;
-  const radius = Math.min(width, height) / 2 - 40;
-
-  // circular node positions
-  const positions = nodes.map((node, i) => {
-    const angle = (2 * Math.PI * i) / nodes.length - Math.PI / 2;
-    return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
-  });
+  const positions = forceLayout(nodes, allEdges, width, height);
 
   const posOf = (n) => positions[nodes.findIndex(v => v === n)];
   const finalSet = new Set(frame.finalized || []);
   const activeSet = new Set(activeEdge ? [activeEdge[0], activeEdge[1]] : []);
 
-  const edgeLine = (e, key, stroke, strokeWidth=2, dash=false) => {
+  // Track undirected edges for weight label (ensure only one label per edge)
+  const drawnEdges = new Set();
+
+  const edgeLine = (e, key, stroke, strokeWidth=2, dash=false, showWeight=true, index=0) => {
     const [u, v, w] = e;
     const p1 = posOf(u), p2 = posOf(v);
     if (!p1 || !p2) return null;
-  
+
     const midx = (p1.x + p2.x) / 2;
     const midy = (p1.y + p2.y) / 2;
-  
-    // vector for offset
+
     const dx = p2.x - p1.x;
     const dy = p2.y - p1.y;
-    const len = Math.sqrt(dx*dx + dy*dy);
-  
-    // perpendicular direction
-    const offsetX = (-dy / len) * 12; 
-    const offsetY = (dx / len) * 12;
-  
-    // push label a bit further from the line if it's too close to a node
-    const distFromP1 = Math.sqrt((midx - p1.x)**2 + (midy - p1.y)**2);
-    const distFromP2 = Math.sqrt((midx - p2.x)**2 + (midy - p2.y)**2);
-    const nearNode = Math.min(distFromP1, distFromP2) < 25;
-  
-    const labelOffset = 18; // push labels further out
-    const finalX = midx + offsetX * 1.5;
-    const finalY = midy + offsetY * 1.5 + (nearNode ? labelOffset : 0);
-  
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+
+    // Consistent perpendicular offset for all edge labels
+    const labelOffset = 14;
+    const offsetX = (-dy / len) * labelOffset;
+    const offsetY = (dx / len) * labelOffset;
+
+    // Normalize edge key for undirected edges
+    const edgeKey = `${Math.min(u,v)}-${Math.max(u,v)}`;
+    let shouldShowWeight = showWeight;
+    if (showWeight) {
+      if (drawnEdges.has(edgeKey)) {
+        shouldShowWeight = false;
+      } else {
+        drawnEdges.add(edgeKey);
+      }
+    }
+
     return (
       <g key={key}>
         <line
@@ -161,12 +278,12 @@ function renderGraph({ frame }) {
           strokeWidth={strokeWidth}
           strokeDasharray={dash ? "6 4" : "none"}
         />
-        {typeof w === "number" && (
+        {shouldShowWeight && (
           <text
-            x={finalX}
-            y={finalY}
+            x={midx + offsetX}
+            y={midy + offsetY}
             textAnchor="middle"
-            fontSize="12"
+            fontSize="10"
             fill="#111"
             stroke="white"
             strokeWidth="3"
@@ -181,17 +298,15 @@ function renderGraph({ frame }) {
   };
 
   return (
-    <svg width={width} height={height} style={{ background: "#f9fafb", border: "1px solid #cbd5e1" }}>
-      {/* background edges (gray) */}
-      {allEdges.map((e, i) => edgeLine(e, `bg-${i}`, "#d1d5db", 2))}
-
-      {/* MST edges (green, thick) */}
-      {mstEdges.map((e, i) => edgeLine(e, `mst-${i}`, HL_COLORS.mark_final, 4))}
-
-      {/* active edge (yellow, dashed) */}
-      {activeEdge ? edgeLine(activeEdge, "active", HL_COLORS.compare, 4, true) : null}
-
-      {/* nodes */}
+    <svg
+      width="100%"
+      height="100%"
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ background: "#f9fafb", border: "1px solid #cbd5e1" }}
+    >
+      {allEdges.map((e, i) => edgeLine(e, `bg-${i}`, "#d1d5db", 1, false, true, i))}
+      {mstEdges.map((e, i) => edgeLine(e, `mst-${i}`, HL_COLORS.mark_final, 3, false, false, i))}
+      {activeEdge ? edgeLine(activeEdge, "active", HL_COLORS.compare, 3, true, false, 0) : null}
       {nodes.map((node, idx) => {
         const p = positions[idx];
         const isFinal = finalSet.has(node);
@@ -199,12 +314,12 @@ function renderGraph({ frame }) {
         const fill = isFinal ? HL_COLORS.mark_final : isActive ? HL_COLORS.compare : "#8b95b3";
         return (
           <g key={`n-${node}`}>
-            <circle cx={p.x} cy={p.y} r={20} fill={fill} stroke="#374151" strokeWidth={2} />
+            <circle cx={p.x} cy={p.y} r={15} fill={fill} stroke="#374151" strokeWidth={1.5} />
             <text
               x={p.x}
-              y={p.y + 4}
+              y={p.y + 3}
               textAnchor="middle"
-              fontSize="10"
+              fontSize="9"
               fill="#f9fafb"
               fontWeight="bold"
               stroke="#374151"
@@ -220,50 +335,21 @@ function renderGraph({ frame }) {
   );
 }
 
-function renderGrid({ frame }) {
-  const grid = frame?.grid || [[]];
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: `repeat(${grid[0]?.length || 1}, 20px)`, gap: "2px" }}>
-      {grid.flat().map((cell, idx) => (
-        <div key={idx} style={{
-          width: 20,
-          height: 20,
-          background: cell === 1 ? "#8b95b3" : "#e5e7eb",
-          border: "1px solid #cbd5e1"
-        }} />
-      ))}
-    </div>
-  );
-}
-
 function renderPathfinding({ frame }) {
   const grid = frame?.grid || [[]];
   return (
     <div style={{ display: "grid", gridTemplateColumns: `repeat(${grid[0]?.length || 1}, 20px)`, gap: "2px" }}>
       {grid.flat().map((cell, idx) => {
-        let bg = "#e5e7eb"; // default background
+        let bg = "#e5e7eb";
         switch(cell) {
           case "wall":
-          case 1:
-            bg = "#8b95b3";
-            break;
-          case "open":
-            bg = HL_COLORS.open;
-            break;
-          case "closed":
-            bg = HL_COLORS.closed;
-            break;
-          case "path":
-            bg = HL_COLORS.path;
-            break;
-          case "start":
-            bg = HL_COLORS.start;
-            break;
-          case "goal":
-            bg = HL_COLORS.goal;
-            break;
-          default:
-            bg = "#e5e7eb";
+          case 1: bg = "#8b95b3"; break;
+          case "open": bg = HL_COLORS.open; break;
+          case "closed": bg = HL_COLORS.closed; break;
+          case "path": bg = HL_COLORS.path; break;
+          case "start": bg = HL_COLORS.start; break;
+          case "goal": bg = HL_COLORS.goal; break;
+          default: bg = "#e5e7eb";
         }
         return (
           <div key={idx} style={{
@@ -278,12 +364,10 @@ function renderPathfinding({ frame }) {
   );
 }
 
-
 export default function Visualizer({ algo }) {
   const [size, setSize] = useState(10);
   const [speed, setSpeed] = useState(300);
   const [playing, setPlaying] = useState(false);
-
   const [frames, setFrames] = useState([]);
   const [index, setIndex] = useState(0);
   const timer = useRef(null);
@@ -306,71 +390,52 @@ export default function Visualizer({ algo }) {
   const highlightType = (current.type || "").toLowerCase();
   const highlightIndices = current.indices || [];
 
-  const gap = 4;
-  const totalGap = gap * (displayArray.length-1);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
   const containerRef = useRef(null);
-  const barWidth = Math.max(2, Math.floor((containerWidth - 24 - totalGap) / displayArray.length));
+  const barWidth = Math.max(2, Math.floor((containerWidth - 24) / displayArray.length));
   const maxValue = Math.max(...displayArray, 1);
+
   useEffect(() => {
     if (!containerRef.current) return;
     const observer = new window.ResizeObserver(entries => {
       if (entries[0]) {
         setContainerWidth(entries[0].contentRect.width);
+        setContainerHeight(entries[0].contentRect.height);
       }
     });
     observer.observe(containerRef.current);
-
-    setContainerWidth(containerRef.current.getBoundingClientRect().width);
-    return () => {
-      observer.disconnect();
-    };
+    const rect = containerRef.current.getBoundingClientRect();
+    setContainerWidth(rect.width);
+    setContainerHeight(rect.height);
+    return () => observer.disconnect();
   }, []);
 
   async function loadRun() {
     setPlaying(false);
     if (timer.current) { clearInterval(timer.current); timer.current = null; }
-    setFrames([]); 
-    setIndex(0);
-    setFinalized([]);
-  
-    const data = await fetchSort({ algorithm: algo, size });
-  
+    setFrames([]); setIndex(0); setFinalized([]);
+    const effectiveSize = isGraphAlgo ? 6 : size;
+    const data = await fetchSort({ algorithm: algo, size: effectiveSize });
     const steps = Array.isArray(data.steps) ? data.steps : [];
-    console.log("Visualizer: received frames", { algo, size, stepsCount: steps.length, first: steps[0] });
     setFrames(steps);
-  
-    if (steps.length > 0) {
-      setIndex(0);
-    }
+    if (steps.length > 0) setIndex(0);
   }
-
 
   function play() {
     if (timer.current) return;
     setPlaying(true);
-    if (index >= frames.length-1) {
-      setIndex(0);
-      setFinalized([]);
-    }
+    if (index >= frames.length-1) { setIndex(0); setFinalized([]); }
     timer.current = setInterval(() => {
       setIndex(i => {
         const nextIndex = i + 1;
-        console.log("FRAME", nextIndex, frames[nextIndex]);
-        console.log("FINALIZED BEFORE", finalized);
         if (nextIndex >= frames.length) {
           clearInterval(timer.current);
           timer.current = null;
           setPlaying(false);
-          const lastFrame = frames[frames.length - 1];
-
-          if (lastFrame?.type === "MARK_FINAL") {
-            setFinalized(prev => [...new Set([...prev, ...lastFrame.indices])]);
-          }
           return i;
         }
         if (frames[nextIndex]?.type === "MARK_FINAL") {
-          console.log("Marking final:", frames[nextIndex].indices);
           setFinalized(prev => [...new Set([...prev, ...frames[nextIndex].indices])]);
         }
         return nextIndex;
@@ -398,84 +463,80 @@ export default function Visualizer({ algo }) {
 
   return (
     <div className="visualizer-body">
-    <div className="visualizer-app">
+      <div className="visualizer-app">
+        <div className="controls">
+          <label className="label">
+            Size: <span style={{minWidth: 35, textAlign: "right"}}>{isGraphAlgo ? 6 : size}</span>
+            <input
+              type="range"
+              min="4"
+              max={["prim","kruskal"].includes(algo.toLowerCase()) ? "7" : "50"}
+              value={isGraphAlgo ? 6 : size}
+              onChange={e => setSize(Number(e.target.value))}
+              disabled={isGraphAlgo}
+            />
+          </label>
 
-      <div className="controls">
-        <label className="label">
-          Size: <span style={{display: "inline-block", minWidth: 35, textAlign: "right"}}>{size}</span>
-          <input
-            type="range"
-            min="2"
-            max={["prim","kruskal"].includes(algo.toLowerCase()) ? "10" : "50"}
-            value={size}
-            onChange={e => setSize(Number(e.target.value))}
-          />
-        </label>
-
-        <label className="label">
-          Speed (ms): <span style ={{display: "inline-block", minWidth: 52, textAlign: "right"}}>{speed}</span>
-          <input    
-            type="range"
-            min="5"
-            max="400"
-            value={speed}
-            onChange={e => setSpeed(Number(e.target.value))}
-          />
-        
-        <div className="buttons">
-          {!playing ? (
-            <button className="btn" onClick={play}>Run</button>
-          ) : (
-            <button className="btn" onClick={stop}>Stop</button>
-          )}
-          <button className="btn" onClick={loadRun}>Shuffle</button>
-        </div>
-        </label>
-      <div style={{gridColumn: "1 / -1"}}>
-        
-      </div>   
-    </div>
-
-      <div className="bars-wrap" ref={containerRef}>
-        {
-          sortingAlgos.some(a => algo.toLowerCase().includes(a)) ? (
-            renderSorting({
-              displayArray,
-              highlightType,
-              highlightIndices,
-              finalized,
-              barWidth,
-              maxValue,
-              HL_COLORS
-            })
-          ) : algo.toLowerCase().includes("search") ? (
-            renderSearch({
-              displayArray,
-              highlightIndices: current.indices,
-              targetIndex: current.targetIndex
-            })
-          ) : (            
-            ["bfs", "dfs", "astar", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
-              renderPathfinding({ frame: current })
-            ) : (        
-              ["prim", "kruskal", "floydwarshall", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
-                renderGraph({ frame: current })
+          <label className="label">
+            Speed (ms): <span style ={{minWidth: 52, textAlign: "right"}}>{speed}</span>
+            <input    
+              type="range"
+              min="5"
+              max="400"
+              value={speed}
+              onChange={e => setSpeed(Number(e.target.value))}
+            />
+            <div className="buttons">
+              {!playing ? (
+                <button className="btn" onClick={play}>Run</button>
               ) : (
-                renderGraph({ frame: current })
+                <button className="btn" onClick={stop}>Stop</button>
+              )}
+              <button className="btn" onClick={loadRun}>Shuffle</button>
+            </div>
+          </label>
+        </div>
+
+        <div className="bars-wrap" ref={containerRef}>
+          {
+            sortingAlgos.some(a => algo.toLowerCase().includes(a)) ? (
+              renderSorting({
+                displayArray,
+                highlightType,
+                highlightIndices,
+                finalized,
+                barWidth,
+                maxValue,
+                HL_COLORS
+              })
+            ) : algo.toLowerCase().includes("search") ? (
+              renderSearch({
+                displayArray,
+                highlightIndices: current.indices,
+                targetIndex: current.targetIndex
+              })
+            ) : (
+              ["bfs", "dfs", "astar", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
+                renderPathfinding({ frame: current })
+              ) : (
+                ["prim", "kruskal", "floydwarshall", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
+                  renderGraph({ frame: current, width: containerWidth, height: containerHeight })
+                ) : (
+                  renderGraph({ frame: current, width: containerWidth, height: containerHeight })
+                )
               )
             )
-          )
-        }
-      </div>
+          }
+        </div>
 
-      <div className="legend">
-        {LEGEND.map(l => (
-          <span key={l.type} style ={{display: "flex", alignItems: "center", gap: 4}}>
-            <span className="legend-box" style={{background: l.color}} />
-            <span>{l.desc}</span>
-          </span>
-        ))}
-      </div>
+        <div className="legend">
+          {LEGEND.map(l => (
+            <span key={l.type} style ={{display: "flex", alignItems: "center", gap: 4}}>
+              <span className="legend-box" style={{background: l.color}} />
+              <span>{l.desc}</span>
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
