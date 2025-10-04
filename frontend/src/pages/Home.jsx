@@ -132,12 +132,6 @@ export default function Home() {
                         linkTo="graph/kruskal"
                     />
                     <AlgorithmCard
-                        title="Floyd-Warshall"
-                        description="Computes shortest paths between all pairs of vertices in a weighted graph."
-                        difficulty="Hard"
-                        linkTo="graph/floydwarshall"
-                    />
-                    <AlgorithmCard
                         title="Prim's Algorithm"
                         description="Finds a minimum spanning tree by growing the spanning tree one edge at a time, choosing the smallest edge that connects the tree to a new vertex."
                         difficulty="Medium"

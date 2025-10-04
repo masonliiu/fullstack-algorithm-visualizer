@@ -11,7 +11,6 @@ import LinearSearch from "./pages/Searching/LinearSearch";
 import BinarySearch from "./pages/Searching/BinarySearch";
 import Dijkstra from "./pages/Graphing/Dijkstra";
 import Kruskal from "./pages/Graphing/Kruskal";
-import FloydWarshall from "./pages/Graphing/FloydWarshall";
 import Prim from "./pages/Graphing/Prim";
 import BFS from "./pages/Pathfinding/BFS";
 import DFS from "./pages/Pathfinding/DFS";
@@ -34,7 +33,6 @@ export default function App() {
                 <Route path="/searching/binary" element={<BinarySearch />} />
                 <Route path="/graph/dijkstra" element={<Dijkstra />} />
                 <Route path="/graph/kruskal" element={<Kruskal />} />
-                <Route path="/graph/floydwarshall" element={<FloydWarshall />} />
                 <Route path="/graph/prim" element={<Prim />} />
                 <Route path="/pathfinding/bfs" element={<BFS />} />
                 <Route path="/pathfinding/dfs" element={<DFS />} />

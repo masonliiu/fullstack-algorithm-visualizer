@@ -53,9 +53,8 @@ while unvisited nodes remain:\n
             <div className="relatedAlgorithms">
                 <h2>Related Algorithms</h2>
                 <div className="card-grid" style={{ gap: "120px"}}>
-                    <AlgorithmCard title="Floyd-Warshall" description="All-pairs shortest path in weighted graphs." difficulty="Hard" linkTo="/graph/floydwarshall" />
+                    <AlgorithmCard title="Kruskal's Algorithm" description="Builds MST by adding edges in order of increasing weight." difficulty="Medium" linkTo="/graph/kruskal" />
                     <AlgorithmCard title="Prim's Algorithm" description="Builds MST by growing edges from one vertex." difficulty="Medium" linkTo="/graph/prim" />
-                    <AlgorithmCard title="BFS" description="Finds shortest path in unweighted graphs." difficulty="Easy" linkTo="/pathfinding/bfs" />
                 </div>
             </div>
         </div>

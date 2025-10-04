@@ -55,7 +55,6 @@ export default function DFS() {
                 <h2>Related Algorithms</h2>
                 <div className="card-grid" style={{ gap: "120px"}}>
                     <AlgorithmCard title="BFS" description="Explores level by level, ensuring shortest paths in unweighted graphs." difficulty="Easy" linkTo="/pathfinding/bfs" />
-                    <AlgorithmCard title="Topological Sort" description="Orders vertices in a directed acyclic graph." difficulty="Medium" linkTo="/graph/topological" />
                 </div>
             </div>
         </div>

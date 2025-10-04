@@ -64,9 +64,6 @@ public class Algorithms {
             case "kruskal":
                 steps = kruskal(arr.length, demoWeightedEdges(arr.length));
                 break;
-            case "floydwarshall":
-                steps = floydWarshall(demoWeightedAdjMatrix(arr.length), arr.length);
-                break;
             default:
                 throw new IllegalArgumentException("Unknown algorithm: " + algo);
         }
@@ -701,86 +698,6 @@ private static int[][] demoWeightedEdges(int n) {
             }
         }
     }
-
-    // floyd-warshall
-    // floyd-warshall
-    private static List<Step> floydWarshall(int[][] dist, int n) {
-        List<Step> steps = new ArrayList<>();
-        int INF = 1000000;
-        int[][] d = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            d[i] = Arrays.copyOf(dist[i], n);
-        }
-
-        List<Integer> nodes = new ArrayList<>();
-        for (int i = 0; i < n; i++) nodes.add(i);
-        List<int[]> allEdges = new ArrayList<>();
-        for (int u = 0; u < n; u++) {
-            for (int v = u + 1; v < n; v++) {
-                if (d[u][v] != INF) {
-                    allEdges.add(new int[]{u, v, d[u][v]});
-                }
-            }
-        }
-        List<int[]> shortestEdges = new ArrayList<>();
-
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    // Show considering path i -> k -> j
-                    steps.add(Step.graphMST(
-                        nodes,
-                        allEdges,
-                        new ArrayList<>(shortestEdges),
-                        new int[]{i, j, d[i][j]},
-                        Arrays.asList(i, k, j), // visited = considered triple
-                        new ArrayList<>()
-                    ));
-
-                    if (d[i][k] != INF && d[k][j] != INF && d[i][k] + d[k][j] < d[i][j]) {
-                        d[i][j] = d[i][k] + d[k][j];
-
-                        // Update or add edge (i,j)
-                        boolean updated = false;
-                        for (int[] e : allEdges) {
-                            if ((e[0] == i && e[1] == j) || (e[0] == j && e[1] == i)) {
-                                e[2] = d[i][j];
-                                updated = true;
-                            }
-                        }
-                        if (!updated) {
-                            allEdges.add(new int[]{i, j, d[i][j]});
-                        }
-
-                        shortestEdges.add(new int[]{i, j, d[i][j]});
-
-                        // Show after updating
-                        steps.add(Step.graphMST(
-                            nodes,
-                            allEdges,
-                            new ArrayList<>(shortestEdges),
-                            null,
-                            Arrays.asList(i, k, j),
-                            new ArrayList<>()
-                        ));
-                    }
-                }
-            }
-        }
-
-        // Final snapshot: all shortest edges in green
-        steps.add(Step.graphMST(
-            nodes,
-            allEdges,
-            new ArrayList<>(shortestEdges),
-            null,
-            new ArrayList<>(),
-            nodes // finalize all
-        ));
-
-        return steps;
-    }
-
     // astar
     private static List<Step> astar(int start, int goal, Map<Integer, List<int[]>> graph, int n) {
         List<Step> steps = new ArrayList<>();

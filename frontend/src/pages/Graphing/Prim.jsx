@@ -56,7 +56,6 @@ while not all vertices in MST:\n
                 <div className="card-grid" style={{ gap: "120px"}}>
                     <AlgorithmCard title="Kruskal's Algorithm" description="Builds MST by adding edges in order of increasing weight." difficulty="Medium" linkTo="/graph/kruskal" />
                     <AlgorithmCard title="Dijkstra's Algorithm" description="Finds shortest paths from a source node to all others." difficulty="Medium" linkTo="/graph/dijkstra" />
-                    <AlgorithmCard title="Floyd-Warshall" description="Finds shortest paths between all pairs of vertices." difficulty="Hard" linkTo="/graph/floydwarshall" />
                 </div>
             </div>
         </div>

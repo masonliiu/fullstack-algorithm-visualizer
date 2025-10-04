@@ -519,7 +519,7 @@ export default function Visualizer({ algo }) {
               ["bfs", "dfs", "astar", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
                 renderPathfinding({ frame: current })
               ) : (
-                ["prim", "kruskal", "floydwarshall", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
+                ["prim", "kruskal", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
                   renderGraph({ frame: current, width: containerWidth, height: containerHeight })
                 ) : (
                   renderGraph({ frame: current, width: containerWidth, height: containerHeight })
