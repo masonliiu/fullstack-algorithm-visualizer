@@ -417,14 +417,25 @@ public class Algorithms {
         int[][] graph = new int[n][n];
         for (int i = 0; i < n; i++) Arrays.fill(graph[i], INF);
         for (int i = 0; i < n; i++) graph[i][i] = 0;
-        // hardcoded for 5 nodes
-        if (n >= 5) {
-            graph[0][1] = 2; graph[1][0] = 2;
-            graph[0][3] = 6; graph[3][0] = 6;
-            graph[1][2] = 3; graph[2][1] = 3;
-            graph[1][3] = 8; graph[3][1] = 8;
-            graph[1][4] = 5; graph[4][1] = 5;
-            graph[2][4] = 7; graph[4][2] = 7;
+        // Generate a random connected undirected weighted graph using a random spanning tree, then add extra edges
+        Random rand = new Random();
+        // Spanning tree: connect each node i (i>=1) to a random previous node
+        for (int i = 1; i < n; i++) {
+            int parent = rand.nextInt(i); // connect to [0, i-1]
+            int w = 1 + rand.nextInt(20);
+            graph[i][parent] = w;
+            graph[parent][i] = w;
+        }
+        // Add extra random edges for density
+        int extra = n; // about n extra edges
+        for (int k = 0; k < extra; k++) {
+            int u = rand.nextInt(n), v = rand.nextInt(n);
+            if (u == v) continue;
+            // Skip if already connected
+            if (graph[u][v] != INF) continue;
+            int w = 1 + rand.nextInt(20);
+            graph[u][v] = w;
+            graph[v][u] = w;
         }
         return graph;
     }
@@ -692,6 +703,7 @@ private static int[][] demoWeightedEdges(int n) {
     }
 
     // floyd-warshall
+    // floyd-warshall
     private static List<Step> floydWarshall(int[][] dist, int n) {
         List<Step> steps = new ArrayList<>();
         int INF = 1000000;
@@ -710,61 +722,62 @@ private static int[][] demoWeightedEdges(int n) {
                 }
             }
         }
-        List<int[]> mstEdges = new ArrayList<>();
-        Set<Integer> finalizedNodes = new HashSet<>();
+        List<int[]> shortestEdges = new ArrayList<>();
 
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    // Show considering this path
+                    // Show considering path i -> k -> j
                     steps.add(Step.graphMST(
                         nodes,
                         allEdges,
-                        new ArrayList<>(mstEdges),
+                        new ArrayList<>(shortestEdges),
                         new int[]{i, j, d[i][j]},
-                        new ArrayList<>(),
-                        new ArrayList<>(finalizedNodes)
+                        Arrays.asList(i, k, j), // visited = considered triple
+                        new ArrayList<>()
                     ));
+
                     if (d[i][k] != INF && d[k][j] != INF && d[i][k] + d[k][j] < d[i][j]) {
                         d[i][j] = d[i][k] + d[k][j];
-                        // Update edge weight in allEdges
+
+                        // Update or add edge (i,j)
+                        boolean updated = false;
                         for (int[] e : allEdges) {
                             if ((e[0] == i && e[1] == j) || (e[0] == j && e[1] == i)) {
                                 e[2] = d[i][j];
+                                updated = true;
                             }
                         }
-                        // Show after update
+                        if (!updated) {
+                            allEdges.add(new int[]{i, j, d[i][j]});
+                        }
+
+                        shortestEdges.add(new int[]{i, j, d[i][j]});
+
+                        // Show after updating
                         steps.add(Step.graphMST(
                             nodes,
                             allEdges,
-                            new ArrayList<>(mstEdges),
+                            new ArrayList<>(shortestEdges),
                             null,
-                            new ArrayList<>(),
-                            new ArrayList<>(finalizedNodes)
+                            Arrays.asList(i, k, j),
+                            new ArrayList<>()
                         ));
                     }
                 }
             }
-            finalizedNodes.add(k);
-            // After each k, finalize node k
-            steps.add(Step.graphMST(
-                nodes,
-                allEdges,
-                new ArrayList<>(mstEdges),
-                null,
-                new ArrayList<>(),
-                new ArrayList<>(finalizedNodes)
-            ));
         }
-        // Final snapshot
+
+        // Final snapshot: all shortest edges in green
         steps.add(Step.graphMST(
             nodes,
             allEdges,
-            new ArrayList<>(mstEdges),
+            new ArrayList<>(shortestEdges),
             null,
             new ArrayList<>(),
-            new ArrayList<>(finalizedNodes)
+            nodes // finalize all
         ));
+
         return steps;
     }
 
