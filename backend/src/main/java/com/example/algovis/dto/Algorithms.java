@@ -399,32 +399,27 @@ public class Algorithms {
     }
 
     // demo weighted graph
-// demo weighted graph generator with guaranteed connectivity
     private static Map<Integer, List<int[]>> demoWeightedGraph(int n) {
         Random rand = new Random();
         Map<Integer, List<int[]>> graph = new HashMap<>();
 
-        // Initialize adjacency list for all nodes
         for (int i = 0; i < n; i++) {
             graph.put(i, new ArrayList<>());
         }
 
-        // Ensure connectivity with a spanning tree
         for (int i = 1; i < n; i++) {
-            int parent = rand.nextInt(i); // connect to any earlier node
+            int parent = rand.nextInt(i); 
             int w = 1 + rand.nextInt(20);
             graph.get(i).add(new int[]{parent, w});
             graph.get(parent).add(new int[]{i, w});
         }
 
-        // Add extra edges for density
-        int extra = n; // about n extra edges
+        int extra = n;
         for (int k = 0; k < extra; k++) {
             int u = rand.nextInt(n);
             int v = rand.nextInt(n);
             if (u == v) continue;
 
-            // Check if edge already exists
             boolean exists = false;
             for (int[] edge : graph.get(u)) {
                 if (edge[0] == v) { exists = true; break; }
@@ -444,21 +439,17 @@ public class Algorithms {
         int[][] graph = new int[n][n];
         for (int i = 0; i < n; i++) Arrays.fill(graph[i], INF);
         for (int i = 0; i < n; i++) graph[i][i] = 0;
-        // Generate a random connected undirected weighted graph using a random spanning tree, then add extra edges
         Random rand = new Random();
-        // Spanning tree: connect each node i (i>=1) to a random previous node
         for (int i = 1; i < n; i++) {
-            int parent = rand.nextInt(i); // connect to [0, i-1]
+            int parent = rand.nextInt(i); 
             int w = 1 + rand.nextInt(20);
             graph[i][parent] = w;
             graph[parent][i] = w;
         }
-        // Add extra random edges for density
-        int extra = n; // about n extra edges
+        int extra = n;
         for (int k = 0; k < extra; k++) {
             int u = rand.nextInt(n), v = rand.nextInt(n);
             if (u == v) continue;
-            // Skip if already connected
             if (graph[u][v] != INF) continue;
             int w = 1 + rand.nextInt(20);
             graph[u][v] = w;
@@ -471,15 +462,13 @@ private static int[][] demoWeightedEdges(int n) {
     Random rand = new Random();
     List<int[]> edges = new ArrayList<>();
 
-    // Ensure connectivity with a random spanning tree
     for (int i = 1; i < n; i++) {
-        int parent = rand.nextInt(i); // connect new node to any previous node
+        int parent = rand.nextInt(i); 
         int w = 1 + rand.nextInt(20);
         edges.add(new int[]{i, parent, w});
     }
 
-    // Add extra random edges for density
-    int extra = n; // about n extra edges
+    int extra = n; 
     for (int k = 0; k < extra; k++) {
         int u = rand.nextInt(n), v = rand.nextInt(n);
         if (u == v) continue;
@@ -521,7 +510,6 @@ private static int[][] demoWeightedEdges(int n) {
             if (visited[u]) continue;
             visited[u] = true;
             finalizedNodes.add(u);
-            // Show current finalized node
             steps.add(Step.graphMST(
                 nodes,
                 allEdges,
@@ -533,7 +521,6 @@ private static int[][] demoWeightedEdges(int n) {
             for (int[] edge : graph.getOrDefault(u, Collections.emptyList())) {
                 int v = edge[0];
                 int weight = edge[1];
-                // Show considering this edge
                 steps.add(Step.graphMST(
                     nodes,
                     allEdges,
@@ -558,7 +545,6 @@ private static int[][] demoWeightedEdges(int n) {
                 }
             }
         }
-        // Final MST snapshot (not really MST, but to show all finalized)
         steps.add(Step.graphMST(
             nodes,
             allEdges,
@@ -607,7 +593,6 @@ private static int[][] demoWeightedEdges(int n) {
             if (u == -1) break;
             inMST[u] = true;
             finalizedNodes.add(u);
-            // Mark node as finalized
             steps.add(Step.graphMST(
                 nodes,
                 allEdges,
@@ -618,7 +603,6 @@ private static int[][] demoWeightedEdges(int n) {
             ));
             for (int v = 0; v < n; v++) {
                 if (graph[u][v] != INF && !inMST[v]) {
-                    // Show considering this edge
                     steps.add(Step.graphMST(
                         nodes,
                         allEdges,
@@ -631,7 +615,6 @@ private static int[][] demoWeightedEdges(int n) {
                         key[v] = graph[u][v];
                         parent[v] = u;
                         mstEdges.add(new int[]{u, v, graph[u][v]});
-                        // Show after updating
                         steps.add(Step.graphMST(
                             nodes,
                             allEdges,
@@ -647,7 +630,6 @@ private static int[][] demoWeightedEdges(int n) {
         for (int i = 0; i < n; i++) {
             finalizedNodes.add(i);
         }
-        // Final MST snapshot
         steps.add(Step.graphMST(
             nodes,
             allEdges,
@@ -676,8 +658,6 @@ private static int[][] demoWeightedEdges(int n) {
         for (int[] edge : edges) {
             int u = edge[0], v = edge[1], w = edge[2];
             int[] currentEdge = new int[]{u, v, w};
-
-            // frame: considering this edge
             steps.add(Step.graphMST(
                 nodes, allEdges, new ArrayList<>(mstEdges), currentEdge,
                 new ArrayList<>(), new ArrayList<>(finalizedNodes)
@@ -689,7 +669,6 @@ private static int[][] demoWeightedEdges(int n) {
                 finalizedNodes.add(u);
                 finalizedNodes.add(v);
 
-                // frame: after accepting edge
                 steps.add(Step.graphMST(
                     nodes, allEdges, new ArrayList<>(mstEdges), null,
                     new ArrayList<>(), new ArrayList<>(finalizedNodes)
@@ -697,7 +676,6 @@ private static int[][] demoWeightedEdges(int n) {
             }
         }
 
-        // final MST snapshot
         steps.add(Step.graphMST(
             nodes, allEdges, new ArrayList<>(mstEdges), null,
             new ArrayList<>(), new ArrayList<>(finalizedNodes)
@@ -762,7 +740,6 @@ private static int[][] demoWeightedEdges(int n) {
             if (visited[u]) continue;
             visited[u] = true;
             finalizedNodes.add(u);
-            // Show current finalized node
             steps.add(Step.graphMST(
                 nodes,
                 allEdges,
@@ -775,7 +752,6 @@ private static int[][] demoWeightedEdges(int n) {
             for (int[] edge : graph.getOrDefault(u, Collections.emptyList())) {
                 int v = edge[0];
                 int weight = edge[1];
-                // Show considering this edge
                 steps.add(Step.graphMST(
                     nodes,
                     allEdges,
@@ -788,7 +764,6 @@ private static int[][] demoWeightedEdges(int n) {
                     dist[v] = dist[u] + weight;
                     mstEdges.add(new int[]{u, v, weight});
                     pq.offer(new int[]{v, dist[v] + heuristic[v]});
-                    // Show after updating
                     steps.add(Step.graphMST(
                         nodes,
                         allEdges,
@@ -800,7 +775,6 @@ private static int[][] demoWeightedEdges(int n) {
                 }
             }
         }
-        // Final snapshot
         steps.add(Step.graphMST(
             nodes,
             allEdges,

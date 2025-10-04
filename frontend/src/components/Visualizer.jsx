@@ -88,10 +88,9 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
   const n = nodes.length;
   if (n === 0) return [];
 
-  // Initialize positions in a circle with small deterministic jitter
   const positions = nodes.map((_, i) => {
     const angle = (2 * Math.PI * i) / n;
-    const jitter = ((i * 37) % 10) - 5; // deterministic jitter from -5 to +4
+    const jitter = ((i * 37) % 10) - 5;
     return {
       x: width / 2 + (width / 3) * Math.cos(angle) + jitter,
       y: height / 2 + (height / 3) * Math.sin(angle) + jitter,
@@ -100,13 +99,11 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
     };
   });
 
-  // Ideal length between nodes
   const area = width * height;
   const k = Math.sqrt(area / n);
 
   let temperature = width / 10;
 
-  // Helper to limit displacement by temperature
   const limitDisplacement = (dx, dy, temp) => {
     const dist = Math.sqrt(dx * dx + dy * dy);
     if (dist === 0) return { dx: 0, dy: 0 };
@@ -117,25 +114,21 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
     };
   };
 
-  // Minimum distance between nodes to avoid collisions (padding)
   const minDist = 40;
 
   for (let it = 0; it < iter; it++) {
-    // Reset forces
     for (let i = 0; i < n; i++) {
       positions[i].dx = 0;
       positions[i].dy = 0;
     }
 
-    // Calculate repulsive forces
     for (let i = 0; i < n; i++) {
       for (let j = i + 1; j < n; j++) {
         let dx = positions[i].x - positions[j].x;
         let dy = positions[i].y - positions[j].y;
-        let dist = Math.sqrt(dx * dx + dy * dy) || 0.01; // avoid div by zero
+        let dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
         let force = (k * k) / dist;
 
-        // Apply repulsive force
         let repulseX = (dx / dist) * force;
         let repulseY = (dy / dist) * force;
 
@@ -146,7 +139,6 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
       }
     }
 
-    // Calculate attractive forces (edges)
     for (let edge of edges) {
       const u = nodes.indexOf(edge[0]);
       const v = nodes.indexOf(edge[1]);
@@ -166,19 +158,15 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
       positions[v].dy += attractY;
     }
 
-    // Update positions with cooling and enforce boundaries
     for (let i = 0; i < n; i++) {
       let { dx, dy } = positions[i];
       let limited = limitDisplacement(dx, dy, temperature);
       positions[i].x += limited.dx;
       positions[i].y += limited.dy;
-
-      // Keep inside boundaries with 40px margin
       positions[i].x = Math.min(width - 40, Math.max(40, positions[i].x));
       positions[i].y = Math.min(height - 40, Math.max(40, positions[i].y));
     }
 
-    // Enforce minimum distance padding (collision avoidance)
     for (let i = 0; i < n; i++) {
       for (let j = i + 1; j < n; j++) {
         let dx = positions[i].x - positions[j].x;
@@ -193,7 +181,6 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
           positions[j].x -= offsetX;
           positions[j].y -= offsetY;
 
-          // Clamp positions inside boundaries after adjustment
           positions[i].x = Math.min(width - 40, Math.max(40, positions[i].x));
           positions[i].y = Math.min(height - 40, Math.max(40, positions[i].y));
           positions[j].x = Math.min(width - 40, Math.max(40, positions[j].x));
@@ -202,7 +189,6 @@ function forceLayout(nodes, edges, width, height, iter = 400) {
       }
     }
 
-    // Cool temperature
     temperature *= 0.95;
   }
 
@@ -238,7 +224,6 @@ function renderGraph({ frame, width = 300, height = 300 }) {
   const finalSet = new Set(frame.finalized || []);
   const activeSet = new Set(activeEdge ? [activeEdge[0], activeEdge[1]] : []);
 
-  // Track undirected edges for weight label (ensure only one label per edge)
   const drawnEdges = new Set();
 
   const edgeLine = (e, key, stroke, strokeWidth=2, dash=false, showWeight=true, index=0) => {
@@ -253,12 +238,10 @@ function renderGraph({ frame, width = 300, height = 300 }) {
     const dy = p2.y - p1.y;
     const len = Math.sqrt(dx*dx + dy*dy) || 1;
 
-    // Consistent perpendicular offset for all edge labels
     const labelOffset = 14;
     const offsetX = (-dy / len) * labelOffset;
     const offsetY = (dx / len) * labelOffset;
 
-    // Normalize edge key for undirected edges
     const edgeKey = `${Math.min(u,v)}-${Math.max(u,v)}`;
     let shouldShowWeight = showWeight;
     if (showWeight) {
