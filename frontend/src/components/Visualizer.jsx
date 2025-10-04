@@ -516,7 +516,7 @@ export default function Visualizer({ algo }) {
                 targetIndex: current.targetIndex
               })
             ) : (
-              ["bfs", "dfs", "astar", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (
+              ["bfs", "dfs", "astar"].some(a => algo.toLowerCase().includes(a)) ? (
                 renderPathfinding({ frame: current })
               ) : (
                 ["prim", "kruskal", "dijkstra"].some(a => algo.toLowerCase().includes(a)) ? (

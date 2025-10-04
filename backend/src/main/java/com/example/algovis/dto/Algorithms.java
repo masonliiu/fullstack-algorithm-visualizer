@@ -53,10 +53,10 @@ public class Algorithms {
                 steps = bfs(0, demoGraph(), arr.length);
                 break;
             case "dijkstra":
-                steps = dijkstra(0, demoWeightedGraph(), arr.length);
+                steps = dijkstra(0, demoWeightedGraph(arr.length), arr.length);
                 break;
             case "astar":
-                steps = astar(0, arr.length - 1, demoWeightedGraph(), arr.length);
+                steps = astar(0, arr.length - 1, demoWeightedGraph(arr.length), arr.length);
                 break;
             case "prim":
                 steps = prim(arr.length, demoWeightedAdjMatrix(arr.length));
@@ -399,13 +399,43 @@ public class Algorithms {
     }
 
     // demo weighted graph
-    private static Map<Integer, List<int[]>> demoWeightedGraph() {
+// demo weighted graph generator with guaranteed connectivity
+    private static Map<Integer, List<int[]>> demoWeightedGraph(int n) {
+        Random rand = new Random();
         Map<Integer, List<int[]>> graph = new HashMap<>();
-        graph.put(0, Arrays.asList(new int[]{1, 2}, new int[]{3, 6}));
-        graph.put(1, Arrays.asList(new int[]{0, 2}, new int[]{2, 3}, new int[]{3, 8}, new int[]{4, 5}));
-        graph.put(2, Arrays.asList(new int[]{1, 3}, new int[]{4, 7}));
-        graph.put(3, Arrays.asList(new int[]{0, 6}, new int[]{1, 8}));
-        graph.put(4, Arrays.asList(new int[]{1, 5}, new int[]{2, 7}));
+
+        // Initialize adjacency list for all nodes
+        for (int i = 0; i < n; i++) {
+            graph.put(i, new ArrayList<>());
+        }
+
+        // Ensure connectivity with a spanning tree
+        for (int i = 1; i < n; i++) {
+            int parent = rand.nextInt(i); // connect to any earlier node
+            int w = 1 + rand.nextInt(20);
+            graph.get(i).add(new int[]{parent, w});
+            graph.get(parent).add(new int[]{i, w});
+        }
+
+        // Add extra edges for density
+        int extra = n; // about n extra edges
+        for (int k = 0; k < extra; k++) {
+            int u = rand.nextInt(n);
+            int v = rand.nextInt(n);
+            if (u == v) continue;
+
+            // Check if edge already exists
+            boolean exists = false;
+            for (int[] edge : graph.get(u)) {
+                if (edge[0] == v) { exists = true; break; }
+            }
+            if (exists) continue;
+
+            int w = 1 + rand.nextInt(20);
+            graph.get(u).add(new int[]{v, w});
+            graph.get(v).add(new int[]{u, w});
+        }
+
         return graph;
     }
 
