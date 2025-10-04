@@ -130,15 +130,49 @@ function renderGraph({ frame }) {
     const [u, v, w] = e;
     const p1 = posOf(u), p2 = posOf(v);
     if (!p1 || !p2) return null;
+  
     const midx = (p1.x + p2.x) / 2;
     const midy = (p1.y + p2.y) / 2;
+  
+    // vector for offset
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const len = Math.sqrt(dx*dx + dy*dy);
+  
+    // perpendicular direction
+    const offsetX = (-dy / len) * 12; 
+    const offsetY = (dx / len) * 12;
+  
+    // push label a bit further from the line if it's too close to a node
+    const distFromP1 = Math.sqrt((midx - p1.x)**2 + (midy - p1.y)**2);
+    const distFromP2 = Math.sqrt((midx - p2.x)**2 + (midy - p2.y)**2);
+    const nearNode = Math.min(distFromP1, distFromP2) < 25;
+  
+    const labelOffset = 18; // push labels further out
+    const finalX = midx + offsetX * 1.5;
+    const finalY = midy + offsetY * 1.5 + (nearNode ? labelOffset : 0);
+  
     return (
       <g key={key}>
-        <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
-              stroke={stroke} strokeWidth={strokeWidth}
-              strokeDasharray={dash ? "6 4" : "none"} />
+        <line
+          x1={p1.x} y1={p1.y}
+          x2={p2.x} y2={p2.y}
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          strokeDasharray={dash ? "6 4" : "none"}
+        />
         {typeof w === "number" && (
-          <text x={midx} y={midy - 6} textAnchor="middle" fontSize="10" fill="#374151">
+          <text
+            x={finalX}
+            y={finalY}
+            textAnchor="middle"
+            fontSize="12"
+            fill="#111"
+            stroke="white"
+            strokeWidth="3"
+            paintOrder="stroke"
+            style={{ pointerEvents: "none" }}
+          >
             {w}
           </text>
         )}
@@ -265,7 +299,9 @@ export default function Visualizer({ algo }) {
     return [];
   }
 
-  const current = frames[index] || {};
+  const rawCurrent = frames[index] || {};
+  const isGraphAlgo = ["prim", "kruskal", "floydwarshall", "dijkstra"].some(a => algo.toLowerCase().includes(a));
+  const current = isGraphAlgo ? { ...rawCurrent, array: [] } : rawCurrent;
   const displayArray = getDisplayArray(frames, index) || [];
   const highlightType = (current.type || "").toLowerCase();
   const highlightIndices = current.indices || [];
