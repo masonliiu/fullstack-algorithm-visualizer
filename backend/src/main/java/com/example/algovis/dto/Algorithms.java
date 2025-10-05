@@ -638,9 +638,6 @@ private static int[][] demoWeightedEdges(int n) {
                 }
             }
         }
-        for (int i = 0; i < n; i++) {
-            finalizedNodes.add(i);
-        }
         steps.add(Step.graphMST(
             nodes,
             allEdges,
