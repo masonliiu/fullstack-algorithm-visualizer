@@ -56,32 +56,83 @@ function renderSorting({
   });
 }
 
-function renderSearch({ displayArray, highlightIndices, targetIndex }) {
-  return displayArray.map((v, i) => {
-    let bg = undefined;
-    if (i === targetIndex) {
-      bg = "#22c55e"; 
-    } else if (highlightIndices?.includes?.(i)) {
-      bg = "#facc15";
-    }
-    return (
-      <div className="bar-container" key={i}
-        style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}
+function renderSearch({ displayArray, highlightIndices, targetIndex, targetValue, currentComparison, containerWidth = 600, containerHeight = 240 }) {
+  const n = displayArray.length;
+  const maxVal = Math.max(...displayArray, 1);
+  const margin = 24;
+  const availableWidth = Math.max(containerWidth - margin, 120);
+  const minBarWidth = 12;
+  const maxBarWidth = 42;
+  const gap = Math.max(3, Math.min(10, Math.floor(availableWidth / (n * 6))));
+  const barWidth = Math.max(minBarWidth, Math.min(maxBarWidth, Math.floor((availableWidth - gap * (n - 1)) / n)));
+  const chartWidth = n * barWidth + (n - 1) * gap;
+  const chartHeight = Math.max(120, Math.min(320, containerHeight - 60));
+
+  return (
+    <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-end",
+          minHeight: chartHeight + 30,
+          marginTop: 12,
+        }}
       >
         <div
-          className="bar"
           style={{
-            width: "18px",
-            height: `${(v / Math.max(...displayArray, 1)) * 320}px`,
-            background: bg || "#8b95b3",
+            display: "flex",
+            gap: `${gap}px`,
+            width: `${chartWidth}px`,
+            justifyContent: "center",
+            alignItems: "flex-end",
           }}
-        />
-        <span className="bar-label" style={{ fontSize: "10px" }}>
-          {v}
-        </span>
+        >
+          {displayArray.map((v, i) => {
+            let bg = undefined;
+            if (i === targetIndex) {
+              bg = "#22c55e";
+            } else if (highlightIndices?.includes?.(i)) {
+              bg = "#facc15";
+            }
+            return (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <div
+                  className="bar"
+                  style={{
+                    width: `${barWidth}px`,
+                    height: `${(v / maxVal) * chartHeight}px`,
+                    background: bg || "#8b95b3",
+                    borderRadius: "3px",
+                    transition: "all 0.2s cubic-bezier(.6,.2,.2,1)",
+                  }}
+                />
+                <span
+                  className="bar-label"
+                  style={{
+                    fontSize: `${Math.min(14, Math.max(9, barWidth * 0.65))}px`,
+                    marginTop: "4px",
+                    color: "#cbd5e1",
+                  }}
+                >
+                  {v}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    );
-  });
+    </div>
+  );
 }
 
 function forceLayout(nodes, edges, width, height, iter = 400) {
@@ -444,10 +495,14 @@ export default function Visualizer({ algo }) {
 
   const sortingAlgos = ["bubble", "insertion", "selection", "merge", "quick", "heap"];
 
+  const isSearchAlgo = algo.toLowerCase().includes("search");
+  const searchTargetValue = current.targetValue;
+  const searchCurrentComparison = current.currentComparison;
+
   return (
     <div className="visualizer-body">
       <div className="visualizer-app">
-        <div className="controls">
+        <div className="controls" style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
           <label className="label">
             Size: <span style={{minWidth: 35, textAlign: "right"}}>{isGraphAlgo ? 6 : size}</span>
             <input
@@ -469,7 +524,7 @@ export default function Visualizer({ algo }) {
               value={speed}
               onChange={e => setSpeed(Number(e.target.value))}
             />
-            <div className="buttons">
+            <div className="buttons" style={{ display: "inline-flex", gap: "6px", marginLeft: 8 }}>
               {!playing ? (
                 <button className="btn" onClick={play}>Run</button>
               ) : (
@@ -478,6 +533,23 @@ export default function Visualizer({ algo }) {
               <button className="btn" onClick={loadRun}>Shuffle</button>
             </div>
           </label>
+
+          {isSearchAlgo && (
+            <div className="search-info">
+              <span>
+                Target Value:{" "}
+                <span className="search-value target">
+                  {searchTargetValue !== undefined ? searchTargetValue : "-"}
+                </span>
+              </span>
+              <span>
+                Comparison:{" "}
+                <span className="search-value comparison">
+                  {searchCurrentComparison !== undefined ? searchCurrentComparison : "-"}
+                </span>
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="bars-wrap" ref={containerRef}>
@@ -492,11 +564,15 @@ export default function Visualizer({ algo }) {
                 maxValue,
                 HL_COLORS
               })
-            ) : algo.toLowerCase().includes("search") ? (
+            ) : isSearchAlgo ? (
               renderSearch({
                 displayArray,
                 highlightIndices: current.indices,
-                targetIndex: current.targetIndex
+                targetIndex: current.targetIndex,
+                targetValue: current.targetValue,
+                currentComparison: current.currentComparison,
+                containerWidth,
+                containerHeight
               })
             ) : (
               ["bfs", "dfs", "astar"].some(a => algo.toLowerCase().includes(a)) ? (

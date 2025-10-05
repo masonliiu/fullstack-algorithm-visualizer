@@ -8,7 +8,6 @@ html, body, #root {
     margin: 0;
     display: flex;
     justify-content: center;
-    padding: 40px;
     box-sizing: border-box;
 }
 
@@ -40,12 +39,20 @@ html, body, #root {
     align-items: center;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 16px;
-    padding: 16px;
+    padding: 18px 20px;
     margin-bottom: 15px;
     transform: translateY(-25px);
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     padding-top: 18px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+}
+
+.controls .search-info {
+    justify-self: end;
 }
 
 .controls label {
@@ -145,3 +152,39 @@ html, body, #root {
     height: 12px;
     border-radius: 3px;
 }
+
+.search-info {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    margin-left: 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e0e6f7;
+    text-shadow: 0 0 8px rgba(77, 166, 255, 0.7);
+    letter-spacing: 0.5px;
+    animation: fadeIn 0.6s ease forwards;
+  }
+  
+  .search-value {
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.8);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+  
+  .search-value.target {
+    color: #4da6ff;
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.9),
+                 0 0 20px rgba(77, 166, 255, 0.6);
+  }
+  
+  .search-value.comparison {
+    color: #f59e42;
+    text-shadow: 0 0 10px rgba(255, 184, 108, 0.9),
+                 0 0 20px rgba(255, 184, 108, 0.6);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
