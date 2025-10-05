@@ -250,16 +250,7 @@ function renderGraph({ frame, width = 300, height = 300 }) {
   const nodes = frame?.nodes || [];
   if (!nodes.length) {
     return (
-      <div style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#f9fafb",
-        border: "1px solid #cbd5e1",
-        color: "#6b7280"
-      }}>
+      <div className="graph-container empty">
         Graph visualization placeholder
       </div>
     );
@@ -270,59 +261,43 @@ function renderGraph({ frame, width = 300, height = 300 }) {
   const activeEdge = frame?.activeEdge || null;
 
   const positions = forceLayout(nodes, allEdges, width, height);
-
   const posOf = (n) => positions[nodes.findIndex(v => v === n)];
+
   const finalSet = new Set(frame.finalized || []);
   const activeSet = new Set(activeEdge ? [activeEdge[0], activeEdge[1]] : []);
-
   const drawnEdges = new Set();
 
-  const edgeLine = (e, key, stroke, strokeWidth=2, dash=false, showWeight=true, index=0) => {
+  const edgeLine = (e, key, type = "default", showWeight = true) => {
     const [u, v, w] = e;
     const p1 = posOf(u), p2 = posOf(v);
     if (!p1 || !p2) return null;
 
     const midx = (p1.x + p2.x) / 2;
     const midy = (p1.y + p2.y) / 2;
-
     const dx = p2.x - p1.x;
     const dy = p2.y - p1.y;
-    const len = Math.sqrt(dx*dx + dy*dy) || 1;
-
-    const labelOffset = 14;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const labelOffset = 16;
     const offsetX = (-dy / len) * labelOffset;
     const offsetY = (dx / len) * labelOffset;
-
-    const edgeKey = `${Math.min(u,v)}-${Math.max(u,v)}`;
-    let shouldShowWeight = showWeight;
-    if (showWeight) {
-      if (drawnEdges.has(edgeKey)) {
-        shouldShowWeight = false;
-      } else {
-        drawnEdges.add(edgeKey);
-      }
-    }
+    const edgeKey = `${Math.min(u, v)}-${Math.max(u, v)}`;
+    if (drawnEdges.has(edgeKey)) showWeight = false;
+    else drawnEdges.add(edgeKey);
 
     return (
       <g key={key}>
         <line
-          x1={p1.x} y1={p1.y}
-          x2={p2.x} y2={p2.y}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          strokeDasharray={dash ? "6 4" : "none"}
+          className={`graph-edge ${type}`}
+          x1={p1.x}
+          y1={p1.y}
+          x2={p2.x}
+          y2={p2.y}
         />
-        {shouldShowWeight && (
+        {showWeight && (
           <text
+            className={`graph-weight ${type}`}
             x={midx + offsetX}
             y={midy + offsetY}
-            textAnchor="middle"
-            fontSize="10"
-            fill="#111"
-            stroke="white"
-            strokeWidth="3"
-            paintOrder="stroke"
-            style={{ pointerEvents: "none" }}
           >
             {w}
           </text>
@@ -333,33 +308,29 @@ function renderGraph({ frame, width = 300, height = 300 }) {
 
   return (
     <svg
+      className="graph-container"
+      viewBox={`0 0 ${width} ${height}`}
       width="100%"
       height="100%"
-      viewBox={`0 0 ${width} ${height}`}
-      style={{ background: "#f9fafb", border: "1px solid #cbd5e1" }}
     >
-      {allEdges.map((e, i) => edgeLine(e, `bg-${i}`, "#d1d5db", 1, false, true, i))}
-      {mstEdges.map((e, i) => edgeLine(e, `mst-${i}`, HL_COLORS.mark_final, 3, false, false, i))}
-      {activeEdge ? edgeLine(activeEdge, "active", HL_COLORS.compare, 3, true, false, 0) : null}
+      {allEdges.map((e, i) => edgeLine(e, `bg-${i}`, "default", true))}
+      {mstEdges.map((e, i) => edgeLine(e, `mst-${i}`, "final", false))}
+      {activeEdge ? edgeLine(activeEdge, "active", "active", false) : null}
+
       {nodes.map((node, idx) => {
         const p = positions[idx];
         const isFinal = finalSet.has(node);
         const isActive = activeSet.has(node);
-        const fill = isFinal ? HL_COLORS.mark_final : isActive ? HL_COLORS.compare : "#8b95b3";
+        const nodeClass = isFinal
+          ? "graph-node final"
+          : isActive
+          ? "graph-node active"
+          : "graph-node";
+
         return (
-          <g key={`n-${node}`}>
-            <circle cx={p.x} cy={p.y} r={15} fill={fill} stroke="#374151" strokeWidth={1.5} />
-            <text
-              x={p.x}
-              y={p.y + 3}
-              textAnchor="middle"
-              fontSize="9"
-              fill="#f9fafb"
-              fontWeight="bold"
-              stroke="#374151"
-              strokeWidth="0.5"
-              paintOrder="stroke"
-            >
+          <g key={`n-${node}`} className={nodeClass}>
+            <circle cx={p.x} cy={p.y} r="18" />
+            <text x={p.x} y={p.y + 4}>
               {node}
             </text>
           </g>

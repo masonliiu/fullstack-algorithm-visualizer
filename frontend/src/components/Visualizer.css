@@ -192,3 +192,60 @@ html, body, #root {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+
+.graph-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  position: relative;
+}
+
+.graph-edge {
+  stroke: #475569;
+  stroke-width: 2;
+  transition: stroke 0.2s ease;
+}
+
+.graph-edge.active {
+  stroke: #4da6ff;
+  stroke-width: 3;
+}
+
+.graph-edge.final {
+  stroke: #22c55e;
+  stroke-width: 3;
+}
+
+.graph-weight {
+  fill: #e2e8f0;
+  font-size: 12px;
+  font-weight: 600;
+  stroke: none;
+  pointer-events: none;
+}
+
+.graph-node circle {
+  fill: #8b95b3;
+  stroke: #334155;
+  stroke-width: 1.5;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.graph-node.active circle {
+  fill: #4da6ff;
+  stroke: #3b82f6;
+}
+
+.graph-node.final circle {
+  fill: #22c55e;
+  stroke: #15803d;
+}
+
+.graph-node text {
+  fill: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  pointer-events: none;
+}
