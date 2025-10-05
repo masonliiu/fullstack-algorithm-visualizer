@@ -2,6 +2,7 @@ package com.example.algovis.dto;
 
 import com.example.algovis.dto.Step;
 import com.example.algovis.dto.SortResponse;
+import com.example.algovis.controller.SortController;
 
 import java.util.*;
 

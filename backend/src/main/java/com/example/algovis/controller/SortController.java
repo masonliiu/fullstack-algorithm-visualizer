@@ -17,7 +17,6 @@ public class SortController {
             @RequestParam(required = false) Integer target
     ) {
         try {
-            System.out.println("Requested algorithm: " + algorithm + ", size: " + size + ", target: " + target);
             Integer actualTarget = target;
             if (actualTarget == null) {
                 java.util.Random rand = (seed != null) ? new java.util.Random(seed) : new java.util.Random();
