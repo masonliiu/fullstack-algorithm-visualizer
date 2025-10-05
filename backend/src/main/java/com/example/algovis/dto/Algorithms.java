@@ -37,15 +37,23 @@ public class Algorithms {
                 steps = quick(arr);
                 steps.add(Step.snapshot(arr));
                 break;
-            case "linearsearch":
-                steps = linearSearch(arr, 42);
+            case "linearsearch": {
+                // Pick a random value from arr as the target
+                int randomIndex = (arr.length > 0) ? new Random().nextInt(arr.length) : 0;
+                int randomTarget = arr[randomIndex];
+                steps = linearSearch(arr, randomTarget);
                 steps.add(Step.snapshot(arr));
                 break;
-            case "binarysearch":
+            }
+            case "binarysearch": {
                 Arrays.sort(arr);
-                steps = binarySearch(arr, 42);
+                // Pick a random value from arr as the target
+                int randomIndex = (arr.length > 0) ? new Random().nextInt(arr.length) : 0;
+                int randomTarget = arr[randomIndex];
+                steps = binarySearch(arr, randomTarget);
                 steps.add(Step.snapshot(arr));
                 break;
+            }
             case "dfs":
                 steps = dfs(0, demoGraph(), arr.length);
                 break;
@@ -315,10 +323,18 @@ public class Algorithms {
     private static List<Step> linearSearch(int[] arr, int target) {
         List<Step> steps = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {
+            String cmpStr;
+            if (arr[i] == target) {
+                cmpStr = target + " == " + arr[i];
+            } else if (target > arr[i]) {
+                cmpStr = target + " > " + arr[i];
+            } else {
+                cmpStr = target + " < " + arr[i];
+            }
             steps.add(
                 Step.compare(i, -1, arr)
                     .withMeta("targetValue", target)
-                    .withMeta("currentComparison", arr[i])
+                    .withMeta("currentComparison", cmpStr)
             );
             if (arr[i] == target) {
                 steps.add(Step.markFinal(i, arr));
@@ -334,10 +350,18 @@ public class Algorithms {
         int left = 0, right = arr.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
+            String cmpStr;
+            if (arr[mid] == target) {
+                cmpStr = target + " == " + arr[mid];
+            } else if (target > arr[mid]) {
+                cmpStr = target + " > " + arr[mid];
+            } else {
+                cmpStr = target + " < " + arr[mid];
+            }
             steps.add(
                 Step.compare(mid, -1, arr)
                     .withMeta("targetValue", target)
-                    .withMeta("currentComparison", arr[mid])
+                    .withMeta("currentComparison", cmpStr)
             );
             if (arr[mid] == target) {
                 steps.add(Step.markFinal(mid, arr));
