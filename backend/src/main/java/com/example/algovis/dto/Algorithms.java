@@ -38,7 +38,6 @@ public class Algorithms {
                 steps.add(Step.snapshot(arr));
                 break;
             case "linearsearch": {
-                // Pick a random value from arr as the target
                 int randomIndex = (arr.length > 0) ? new Random().nextInt(arr.length) : 0;
                 int randomTarget = arr[randomIndex];
                 steps = linearSearch(arr, randomTarget);
@@ -47,7 +46,6 @@ public class Algorithms {
             }
             case "binarysearch": {
                 Arrays.sort(arr);
-                // Pick a random value from arr as the target
                 int randomIndex = (arr.length > 0) ? new Random().nextInt(arr.length) : 0;
                 int randomTarget = arr[randomIndex];
                 steps = binarySearch(arr, randomTarget);
@@ -337,7 +335,11 @@ public class Algorithms {
                     .withMeta("currentComparison", cmpStr)
             );
             if (arr[i] == target) {
-                steps.add(Step.markFinal(i, arr));
+                steps.add(
+                    Step.markFinal(i, arr)
+                        .withMeta("targetValue", target)
+                        .withMeta("currentComparison", target + " == " + arr[i])
+                );
                 break;
             }
         }
@@ -364,7 +366,11 @@ public class Algorithms {
                     .withMeta("currentComparison", cmpStr)
             );
             if (arr[mid] == target) {
-                steps.add(Step.markFinal(mid, arr));
+                steps.add(
+                    Step.markFinal(mid, arr)
+                        .withMeta("targetValue", target)
+                        .withMeta("currentComparison", target + " == " + arr[mid])
+                );
                 break;
             } else if (arr[mid] < target) {
                 left = mid + 1;

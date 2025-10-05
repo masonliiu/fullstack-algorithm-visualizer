@@ -399,8 +399,9 @@ function renderPathfinding({ frame }) {
 }
 
 export default function Visualizer({ algo }) {
-  const [size, setSize] = useState(10);
-  const [speed, setSpeed] = useState(300);
+  const isSearch = algo.toLowerCase().includes("search");
+  const [size, setSize] = useState(isSearch ? 20 : 10);
+  const [speed, setSpeed] = useState(isSearch ? 700 : 300);
   const [playing, setPlaying] = useState(false);
   const [frames, setFrames] = useState([]);
   const [index, setIndex] = useState(0);
