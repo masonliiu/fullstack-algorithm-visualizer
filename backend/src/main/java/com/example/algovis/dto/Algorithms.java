@@ -613,39 +613,28 @@ private static int[][] demoWeightedEdges(int n) {
                 }
             }
             if (u == -1) break;
+        
             inMST[u] = true;
             finalizedNodes.add(u);
+        
+            if (parent[u] != -1) {
+                mstEdges.add(new int[]{parent[u], u, graph[u][parent[u]]});
+            }
+        
             steps.add(Step.graphMST(
-                nodes,
-                allEdges,
-                new ArrayList<>(mstEdges),
-                null,
-                new ArrayList<>(),
-                new ArrayList<>(finalizedNodes)
+                nodes, allEdges, new ArrayList<>(mstEdges),
+                null, new ArrayList<>(), new ArrayList<>(finalizedNodes)
             ));
+        
             for (int v = 0; v < n; v++) {
-                if (graph[u][v] != INF && !inMST[v]) {
+                if (graph[u][v] != INF && !inMST[v] && graph[u][v] < key[v]) {
+                    key[v] = graph[u][v];
+                    parent[v] = u;
                     steps.add(Step.graphMST(
-                        nodes,
-                        allEdges,
-                        new ArrayList<>(mstEdges),
+                        nodes, allEdges, new ArrayList<>(mstEdges),
                         new int[]{u, v, graph[u][v]},
-                        new ArrayList<>(),
-                        new ArrayList<>(finalizedNodes)
+                        new ArrayList<>(), new ArrayList<>(finalizedNodes)
                     ));
-                    if (graph[u][v] < key[v]) {
-                        key[v] = graph[u][v];
-                        parent[v] = u;
-                        mstEdges.add(new int[]{u, v, graph[u][v]});
-                        steps.add(Step.graphMST(
-                            nodes,
-                            allEdges,
-                            new ArrayList<>(mstEdges),
-                            null,
-                            new ArrayList<>(),
-                            new ArrayList<>(finalizedNodes)
-                        ));
-                    }
                 }
             }
         }
