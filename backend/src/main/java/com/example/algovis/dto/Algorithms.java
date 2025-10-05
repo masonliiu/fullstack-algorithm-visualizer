@@ -507,8 +507,10 @@ private static int[][] demoWeightedEdges(int n) {
         List<Step> steps = new ArrayList<>();
         int INF = Integer.MAX_VALUE;
         int[] dist = new int[n];
+        int[] parent = new int[n];
         boolean[] visited = new boolean[n];
         Arrays.fill(dist, INF);
+        Arrays.fill(parent, -1);
         dist[start] = 0;
 
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
@@ -524,7 +526,8 @@ private static int[][] demoWeightedEdges(int n) {
                 if (u < v) allEdges.add(new int[]{u, v, w});
             }
         }
-        List<int[]> mstEdges = new ArrayList<>();
+
+        List<int[]> activeEdges = new ArrayList<>();
         Set<Integer> finalizedNodes = new HashSet<>();
 
         while (!pq.isEmpty()) {
@@ -532,48 +535,65 @@ private static int[][] demoWeightedEdges(int n) {
             int u = curr[0];
             if (visited[u]) continue;
             visited[u] = true;
+
+            // Highlight node being processed
             finalizedNodes.add(u);
             steps.add(Step.graphMST(
                 nodes,
                 allEdges,
-                new ArrayList<>(mstEdges),
+                new ArrayList<>(activeEdges),
                 null,
                 new ArrayList<>(),
                 new ArrayList<>(finalizedNodes)
             ));
+
             for (int[] edge : graph.getOrDefault(u, Collections.emptyList())) {
                 int v = edge[0];
                 int weight = edge[1];
                 steps.add(Step.graphMST(
                     nodes,
                     allEdges,
-                    new ArrayList<>(mstEdges),
+                    new ArrayList<>(activeEdges),
                     new int[]{u, v, weight},
                     new ArrayList<>(),
                     new ArrayList<>(finalizedNodes)
                 ));
                 if (!visited[v] && dist[u] != INF && dist[u] + weight < dist[v]) {
                     dist[v] = dist[u] + weight;
-                    mstEdges.add(new int[]{u, v, weight});
+                    parent[v] = u;
                     pq.offer(new int[]{v, dist[v]});
-                    steps.add(Step.graphMST(
-                        nodes,
-                        allEdges,
-                        new ArrayList<>(mstEdges),
-                        null,
-                        new ArrayList<>(),
-                        new ArrayList<>(finalizedNodes)
-                    ));
                 }
             }
         }
+
+        List<int[]> finalEdges = new ArrayList<>();
+        Set<Integer> highlighted = new HashSet<>();
+        for (int v = 0; v < n; v++) {
+            if (parent[v] != -1) {
+                finalEdges.add(new int[]{parent[v], v, dist[v] - dist[parent[v]]});
+            }
+        }
+
+        for (int[] edge : finalEdges) {
+            highlighted.add(edge[0]);
+            highlighted.add(edge[1]);
+            steps.add(Step.graphMST(
+                nodes,
+                allEdges,
+                new ArrayList<>(finalEdges.subList(0, finalEdges.indexOf(edge) + 1)),
+                null,
+                new ArrayList<>(),
+                new ArrayList<>(highlighted)
+            ));
+        }
+
         steps.add(Step.graphMST(
             nodes,
             allEdges,
-            new ArrayList<>(mstEdges),
+            new ArrayList<>(finalEdges),
             null,
             new ArrayList<>(),
-            new ArrayList<>(finalizedNodes)
+            new ArrayList<>(highlighted)
         ));
         return steps;
     }
