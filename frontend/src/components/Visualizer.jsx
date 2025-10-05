@@ -474,7 +474,7 @@ export default function Visualizer({ algo }) {
   return (
     <div className="visualizer-body">
       <div className="visualizer-app">
-        <div className="controls" style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
+        <div className="controls" style={{ display: "grid", alignItems: "center", gap: "0.25rem", flexWrap: "wrap" }}>
           <label className="label">
             Size: <span style={{minWidth: 35, textAlign: "right"}}>{isGraphAlgo ? 6 : size}</span>
             <input
