@@ -322,24 +322,16 @@ public class Algorithms {
     private static List<Step> linearSearch(int[] arr, int target) {
         List<Step> steps = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {
-            String cmpStr;
-            if (arr[i] == target) {
-                cmpStr = target + " == " + arr[i];
-            } else if (target > arr[i]) {
-                cmpStr = target + " > " + arr[i];
-            } else {
-                cmpStr = target + " < " + arr[i];
-            }
             steps.add(
                 Step.compare(i, -1, arr)
                     .withMeta("targetValue", target)
-                    .withMeta("currentComparison", cmpStr)
+                    .withMeta("currentComparison", arr[i])
             );
             if (arr[i] == target) {
                 steps.add(
                     Step.markFinal(i, arr)
                         .withMeta("targetValue", target)
-                        .withMeta("currentComparison", target + " == " + arr[i])
+                        .withMeta("currentComparison", arr[i])
                 );
                 break;
             }
@@ -353,24 +345,16 @@ public class Algorithms {
         int left = 0, right = arr.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            String cmpStr;
-            if (arr[mid] == target) {
-                cmpStr = target + " == " + arr[mid];
-            } else if (target > arr[mid]) {
-                cmpStr = target + " > " + arr[mid];
-            } else {
-                cmpStr = target + " < " + arr[mid];
-            }
             steps.add(
                 Step.compare(mid, -1, arr)
                     .withMeta("targetValue", target)
-                    .withMeta("currentComparison", cmpStr)
+                    .withMeta("currentComparison", arr[mid])
             );
             if (arr[mid] == target) {
                 steps.add(
                     Step.markFinal(mid, arr)
                         .withMeta("targetValue", target)
-                        .withMeta("currentComparison", target + " == " + arr[mid])
+                        .withMeta("currentComparison", arr[mid])
                 );
                 break;
             } else if (arr[mid] < target) {

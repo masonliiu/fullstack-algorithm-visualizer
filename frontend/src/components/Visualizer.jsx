@@ -544,9 +544,19 @@ export default function Visualizer({ algo }) {
               </span>
               <span>
                 Comparison:{" "}
-                <span className={`search-value comparison ${searchCurrentComparison !== undefined ? "visible" : "hidden"}`}>
-                  {searchCurrentComparison !== undefined ? searchCurrentComparison : "-"}
-                </span>
+                {searchCurrentComparison !== undefined ? (
+                  <>
+                    <span className="search-value target">{searchTargetValue}</span>{" "}
+                    {searchTargetValue === searchCurrentComparison
+                      ? "=="
+                      : searchTargetValue > searchCurrentComparison
+                      ? ">"
+                      : "<"}{" "}
+                    <span className="search-value comparison">{searchCurrentComparison}</span>
+                  </>
+                ) : (
+                  "-"
+                )}
               </span>
             </div>
           )}
@@ -590,12 +600,19 @@ export default function Visualizer({ algo }) {
         </div>
 
         <div className="legend">
-          {LEGEND.map(l => (
-            <span key={l.type} style ={{display: "flex", alignItems: "center", gap: 4}}>
-              <span className="legend-box" style={{background: l.color}} />
-              <span>{l.desc}</span>
+          {isSearchAlgo ? (
+            <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <span className="legend-box" style={{ background: HL_COLORS.compare }} />
+              <span>Comparing values</span>
             </span>
-          ))}
+          ) : (
+            LEGEND.map(l => (
+              <span key={l.type} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <span className="legend-box" style={{ background: l.color }} />
+                <span>{l.desc}</span>
+              </span>
+            ))
+          )}
         </div>
       </div>
     </div>
