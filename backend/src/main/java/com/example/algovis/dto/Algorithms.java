@@ -6,7 +6,7 @@ import com.example.algovis.dto.SortResponse;
 import java.util.*;
 
 public class Algorithms {
-    public static SortResponse sort(String algo, int size, Long seed) {
+    public static SortResponse sort(String algo, int size, Long seed, int target) {
         int[] initial = randomArray(size, seed);
         int[] arr = Arrays.copyOf(initial, initial.length);
 
@@ -315,7 +315,11 @@ public class Algorithms {
     private static List<Step> linearSearch(int[] arr, int target) {
         List<Step> steps = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {
-            steps.add(Step.compare(i, -1, arr));
+            steps.add(
+                Step.compare(i, -1, arr)
+                    .withMeta("targetValue", target)
+                    .withMeta("currentComparison", arr[i])
+            );
             if (arr[i] == target) {
                 steps.add(Step.markFinal(i, arr));
                 break;
@@ -324,13 +328,17 @@ public class Algorithms {
         return steps;
     }
 
-    // binary Search
+    // binary search
     private static List<Step> binarySearch(int[] arr, int target) {
         List<Step> steps = new ArrayList<>();
         int left = 0, right = arr.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            steps.add(Step.compare(mid, -1, arr));
+            steps.add(
+                Step.compare(mid, -1, arr)
+                    .withMeta("targetValue", target)
+                    .withMeta("currentComparison", arr[mid])
+            );
             if (arr[mid] == target) {
                 steps.add(Step.markFinal(mid, arr));
                 break;
@@ -533,7 +541,6 @@ private static int[][] demoWeightedEdges(int n) {
                     dist[v] = dist[u] + weight;
                     mstEdges.add(new int[]{u, v, weight});
                     pq.offer(new int[]{v, dist[v]});
-                    // Show after updating
                     steps.add(Step.graphMST(
                         nodes,
                         allEdges,

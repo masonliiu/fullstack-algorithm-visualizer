@@ -175,14 +175,12 @@ html, body, #root {
   
   .search-value.target {
     color: #4da6ff;
-    text-shadow: 0 0 10px rgba(77, 166, 255, 0.9),
-                 0 0 20px rgba(77, 166, 255, 0.6);
+    text-shadow: 0 0 10px rgba(77, 166, 255, 0.9);
   }
   
   .search-value.comparison {
-    color: #f59e42;
-    text-shadow: 0 0 10px rgba(255, 184, 108, 0.9),
-                 0 0 20px rgba(255, 184, 108, 0.6);
+    color: #facc15;
+    text-shadow: 0 0 10px rgba(255, 184, 108, 0.9);
   }
   
   @keyframes fadeIn {

@@ -496,8 +496,8 @@ export default function Visualizer({ algo }) {
   const sortingAlgos = ["bubble", "insertion", "selection", "merge", "quick", "heap"];
 
   const isSearchAlgo = algo.toLowerCase().includes("search");
-  const searchTargetValue = current.targetValue;
-  const searchCurrentComparison = current.currentComparison;
+  const searchTargetValue = current.targetValue ?? current.extra?.targetValue;
+  const searchCurrentComparison = current.currentComparison ?? current.extra?.currentComparison;
 
   return (
     <div className="visualizer-body">
@@ -538,13 +538,13 @@ export default function Visualizer({ algo }) {
             <div className="search-info">
               <span>
                 Target Value:{" "}
-                <span className="search-value target">
+                <span className={`search-value target ${searchTargetValue !== undefined ? "visible" : "hidden"}`}>
                   {searchTargetValue !== undefined ? searchTargetValue : "-"}
                 </span>
               </span>
               <span>
                 Comparison:{" "}
-                <span className="search-value comparison">
+                <span className={`search-value comparison ${searchCurrentComparison !== undefined ? "visible" : "hidden"}`}>
                   {searchCurrentComparison !== undefined ? searchCurrentComparison : "-"}
                 </span>
               </span>

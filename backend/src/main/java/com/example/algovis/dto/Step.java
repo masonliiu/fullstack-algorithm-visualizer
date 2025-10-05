@@ -1,6 +1,8 @@
 package com.example.algovis.dto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Step {
     private StepType type;
@@ -16,6 +18,8 @@ public class Step {
 
     private String[][] grid;
 
+    private Map<String, Object> extra;
+
     public Step() {}
 
     public Step(StepType type, int[] indices, int[] array) {
@@ -24,7 +28,6 @@ public class Step {
         this.array = array;
     }
 
-    // ========== ARRAY VISUALS ==========
     public static Step compare(int index1, int index2, int[] arr) {
         return new Step(StepType.COMPARE, new int[]{index1, index2}, arr.clone());
     }
@@ -38,7 +41,6 @@ public class Step {
         return new Step(StepType.ARRAY_SNAPSHOT, null, array.clone());
     }
 
-    // ========== GRAPH VISUALS ==========
     public static Step graph(List<Integer> nodes, List<int[]> edges,
                              List<Integer> visited, List<Integer> finalized) {
         Step step = new Step();
@@ -50,7 +52,6 @@ public class Step {
         return step;
     }
 
-    // For older graph algos with mstEdges list
     public static Step graph(List<Integer> nodes, List<int[]> edges, List<int[]> mstEdges,
                              List<Integer> visited, List<Integer> finalized) {
         Step step = new Step();
@@ -63,7 +64,6 @@ public class Step {
         return step;
     }
 
-    // ✅ Properly inside class now
     public static Step graphMST(
             List<Integer> nodes,
             List<int[]> allEdges,
@@ -83,7 +83,6 @@ public class Step {
         return step;
     }
 
-    // ========== GRID VISUALS ==========
     public static Step grid(String[][] grid) {
         Step step = new Step();
         step.type = StepType.GRID_SNAPSHOT;
@@ -91,7 +90,7 @@ public class Step {
         return step;
     }
 
-    // ========== GETTERS ==========
+    
     public StepType getType() { return type; }
     public int[] getIndices() { return indices; }
     public int[] getArray() { return array; }
@@ -102,4 +101,13 @@ public class Step {
     public List<Integer> getVisited() { return visited; }
     public List<Integer> getFinalized() { return finalized; }
     public String[][] getGrid() { return grid; }
+
+    public Map<String, Object> getExtra() { return extra; }
+    public void setExtra(Map<String, Object> extra) { this.extra = extra; }
+
+    public Step withMeta(String key, Object value) {
+        if (this.extra == null) this.extra = new HashMap<>();
+        this.extra.put(key, value);
+        return this;
+    }
 }
