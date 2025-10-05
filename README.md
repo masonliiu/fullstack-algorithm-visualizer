@@ -1,7 +1,7 @@
 # Fullstack Algorithm Visualizer
 
 In progress still.        
-Adding Quick sort, Heap sort; touching up stylization via css, adding new algorithms.
+only BFS, DFS, and AStar backend left. UI & UX improvements, launch ETA: 1 week
 
 # Techstack: 
 
