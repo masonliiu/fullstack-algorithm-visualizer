@@ -4,6 +4,7 @@ html, body, #root {
     padding: 0;
 }
 .visualizer-body {
+    max-width: 100%;
     width: 100%;
     margin: 0;
     display: flex;
@@ -13,11 +14,13 @@ html, body, #root {
 
 .visualizer-app {
     width: 100%;
-    max-width: 90rem;
+    max-width: 85rem;
+    margin: 0 auto;
     background: rgba(255, 255, 255, 0.06);
+    box-sizing: border-box;
     backdrop-filter: blur(500px), saturate(700%);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 2rem;
     padding-top: 4rem;
     box-shadow: 0 8px 30px rgba(64, 56, 56, 0.35);
     animation: fadeIn 1s ease forwards;
@@ -35,7 +38,6 @@ html, body, #root {
 .controls {
     display: grid;
     grid-template-columns: auto auto 1fr;
-    gap: 15px;
     align-items: center;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 16px;
@@ -48,16 +50,18 @@ html, body, #root {
     overflow: hidden;
     box-sizing: border-box;
     max-width: 100%;
+    margin: 0 auto;
+    padding-left: 2rem;
     width: 100%;
 }
 
 .controls .search-info {
-    justify-self: end;
+    grid-column: 1 / -1;
+    justify-self: start;
 }
 
 .controls label {
     display: flex;
-    gap: 10px;
     align-items: center;
     font-size: 1rem;
     font-weight: 600;
@@ -99,6 +103,7 @@ html, body, #root {
     gap: 4px;
     align-items: end;
     height: 360px;
+    width: 100%;
   }
 
 .bar-container {
@@ -159,7 +164,7 @@ html, body, #root {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-left: 1.5rem;
+    margin-left: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
     color: #e0e6f7;

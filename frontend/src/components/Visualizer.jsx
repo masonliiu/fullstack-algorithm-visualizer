@@ -524,7 +524,7 @@ export default function Visualizer({ algo }) {
               value={speed}
               onChange={e => setSpeed(Number(e.target.value))}
             />
-            <div className="buttons" style={{ display: "inline-flex", gap: "6px", marginLeft: 8 }}>
+            <div className="buttons" style={{ display: "inline-flex", marginLeft: 10 }}>
               {!playing ? (
                 <button className="btn" onClick={play}>Run</button>
               ) : (
@@ -533,7 +533,6 @@ export default function Visualizer({ algo }) {
               <button className="btn" onClick={loadRun}>Shuffle</button>
             </div>
           </label>
-
           {isSearchAlgo && (
             <div className="search-info">
               <span>
@@ -551,6 +550,7 @@ export default function Visualizer({ algo }) {
             </div>
           )}
         </div>
+        
 
         <div className="bars-wrap" ref={containerRef}>
           {
