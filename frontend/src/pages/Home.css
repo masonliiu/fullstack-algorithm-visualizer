@@ -139,23 +139,26 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     max-width: 1200px;
-    margin-bottom: 300px;
-    margin-top: 20px;
+    margin-bottom: 50px;
+    margin-top: 10px;
 }
 
+.searching-section,
+.pathfinding-section,
+.graph-section,
 .sorting-section {
-    margin-top: 120px;
+    margin-top: 150px;
     opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.sorting-section.hidden {
+.hidden {
     opacity: 0;
     transform: translateY(40px);
 }
 
-.sorting-section.visible {
+.visible {
     opacity: 1;
     transform: translateY(0);
 }

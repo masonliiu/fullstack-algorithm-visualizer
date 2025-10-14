@@ -18,24 +18,26 @@ export default function Home() {
     };
 
     useEffect(() => {
-        const sortingSection = document.querySelector(".sorting-section");
-        if (!sortingSection) return;
+        const sections = document.querySelectorAll(".sorting-section, .searching-section, .graph-section, .pathfinding-section");
 
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    sortingSection.classList.add("visible");
-                    sortingSection.classList.remove("hidden");
-                } else {
-                    sortingSection.classList.remove("visible");
-                    sortingSection.classList.add("hidden");
-                }
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        entry.target.classList.remove("hidden");
+                    } else {
+                        entry.target.classList.add("hidden");
+                        entry.target.classList.remove("visible");
+                    }
+                })
             },
-            { threshold: 0.5 }
+            { threshold: 0.6 }
         );
-        observer.observe(sortingSection);
+        sections.forEach((section) => observer.observe(section));
+
         return () => {
-            if (sortingSection) observer.unobserve(sortingSection);
+            sections.forEach((section) => observer.unobserve(section));
         };
     }, []);
 

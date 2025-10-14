@@ -572,7 +572,7 @@ export default function Visualizer({ algo }) {
 
         <div className="legend">
           {isSearchAlgo ? (
-            <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ display: "flex", alignItems: "center", gap: 4, marginTop: -10 }}>
               <span className="legend-box" style={{ background: HL_COLORS.compare }} />
               <span>Comparing values</span>
             </span>
