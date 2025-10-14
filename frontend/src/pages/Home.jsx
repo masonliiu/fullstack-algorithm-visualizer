@@ -56,9 +56,19 @@ export default function Home() {
                     </span>{" "}
                     step by step through interactive animations.
                 </p>
-                <button className="hero-button" onClick={scrollToCards}>
+                <button className="hero-button" onClick={() => 
+                    document.querySelector(".sorting-section")?.scrollIntoView({ behavior: "smooth" })
+                }>
                     Get Started ↓
                 </button>
+                <div className="scroll-down"
+                    onClick={() =>
+                        document.querySelector(".sorting-section")?.scrollIntoView({ behavior: "smooth"})
+                    }
+                >
+                    <span className="scroll-text">Continue</span>
+                    <div className="arrow"></div>
+                </div>
             </div>
             <div className="sorting-section hidden">
                 <h2 className="home-title">Sorting</h2>
