@@ -23,16 +23,18 @@ export default function Home() {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
+                    if (entry.intersectionRatio > 0.35) {
                         entry.target.classList.add("visible");
                         entry.target.classList.remove("hidden");
-                    } else {
+                    } else if (entry.intersectionRatio < 0.25) {
                         entry.target.classList.add("hidden");
                         entry.target.classList.remove("visible");
                     }
-                })
+                });
             },
-            { threshold: 0.6 }
+            { threshold: [0, 0.05, 0.25, 0.5, 0.75, 1],
+                rootMargin: "0px 0px -10px 0px",
+            }
         );
         sections.forEach((section) => observer.observe(section));
 
