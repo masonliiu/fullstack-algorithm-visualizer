@@ -103,7 +103,7 @@ export default function Home() {
                     <AlgorithmCard
                         title="Heap Sort"
                         description="Builds a heap from the array and repeatedly extracts the maximum element to sort the array."
-                        difficulty="Medium"
+                        difficulty="Hard"
                         linkTo="sorting/heap"
                     />
                 </div>
